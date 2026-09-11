@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>One More Trip?</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #050505;
+      color: white;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+    }
+
+    body.started {
+      overflow-y: auto;
+    }
+
+    /* ===========================
+       INTRO
+    ============================ */
+
+    #intro {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background:
+        radial-gradient(circle at center, #191919 0%, #050505 55%, #000 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1.2s ease, visibility 1.2s ease;
+    }
+
+    #intro.hide {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .intro-content {
+      text-align: center;
+      width: 90%;
+      max-width: 700px;
+    }
+
+    .tiny {
+      letter-spacing: 5px;
+      font-size: 11px;
+      color: #aaa;
+      margin-bottom: 25px;
+    }
+
+    .intro-content h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(44px, 9vw, 96px);
+      letter-spacing: -3px;
+      line-height: 0.9;
+      margin-bottom: 22px;
+    }
+
+    .intro-content p {
+      color: #aaa;
+      font-size: 15px;
+      margin-bottom: 35px;
+    }
+
+    .enter-btn {
+      border: 1px solid rgba(255,255,255,.7);
+      background: transparent;
+      color: white;
+      padding: 16px 34px;
+      border-radius: 100px;
+      font-size: 12px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .enter-btn:hover {
+      background: white;
+      color: black;
+    }
+
+    /* ===========================
+       GENERAL SCENES
+    ============================ */
+
+    .scene {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 70px 24px;
+    }
+
+    .scene-inner {
+      position: relative;
+      z-index: 4;
+      width: min(1100px, 92%);
+      text-align: center;
+    }
+
+    .eyebrow {
+      color: #aaa;
+      font-size: 11px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+    }
+
+    .big-title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(52px, 11vw, 130px);
+      line-height: .87;
+      letter-spacing: -5px;
+    }
+
+    .mid-title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(35px, 7vw, 76px);
+      line-height: 1;
+    }
+
+    .subtitle {
+      max-width: 650px;
+      margin: 25px auto 0;
+      font-size: clamp(15px, 2vw, 20px);
+      color: #bababa;
+      line-height: 1.6;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition:
+        opacity 1.1s ease,
+        transform 1.1s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===========================
+       PROGRESS
+    ============================ */
+
+    .progress {
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      height: 2px;
+      width: 0%;
+      background: white;
+    }
+
+    /* ===========================
+       OPENING
+    ============================ */
+
+    .opening {
+      background:
+        linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.9)),
+        radial-gradient(circle at 50% 40%, #242424, #050505 70%);
+    }
+
+    .opening .line {
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-size: clamp(20px, 3vw, 30px);
+      color: #ddd;
+      margin-top: 35px;
+    }
+
+    /* ===========================
+       MOROCCO
+    ============================ */
+
+    .morocco {
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.9)),
+        linear-gradient(120deg, #9b5b28, #d5aa63 45%, #4b2418);
+    }
+
+    .stamp {
+      display: inline-block;
+      margin-top: 35px;
+      border: 2px solid rgba(255,255,255,.8);
+      padding: 12px 20px;
+      transform: rotate(-4deg);
+      font-weight: bold;
+      letter-spacing: 4px;
+      font-size: 12px;
+    }
+
+    /* ===========================
+       TWIST
+    ============================ */
+
+    .twist {
+      background: black;
+    }
+
+    .glitch {
+      position: relative;
+      color: white;
+      text-shadow:
+        3px 0 #cf2744,
+        -3px 0 #284cda;
+      animation: glitch 0.25s infinite alternate;
+    }
+
+    @keyframes glitch {
+      from { transform: translate(0); }
+      to { transform: translate(2px, -1px); }
+    }
+
+    /* ===========================
+       PHOTO FULL
+    ============================ */
+
+    .photo-scene {
+      min-height: 120vh;
+      position: relative;
+    }
+
+    .photo-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(.42);
+    }
+
+    .photo-gradient {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, #050505 0%, transparent 55%),
+        linear-gradient(to bottom, rgba(0,0,0,.15), transparent 30%);
+      z-index: 2;
+    }
+
+    .photo-text {
+      position: absolute;
+      z-index: 4;
+      bottom: 10vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(900px, 88%);
+      text-align: center;
+    }
+
+    /* ===========================
+       QUESTIONS
+    ============================ */
+
+    .questions {
+      background: #080808;
+    }
+
+    .question-grid {
+      margin: 55px auto 0;
+      max-width: 850px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .question {
+      background: #111;
+      border: 1px solid #222;
+      padding: 30px;
+      text-align: left;
+      min-height: 160px;
+      transition: .3s;
+    }
+
+    .question:hover {
+      transform: translateY(-4px);
+      border-color: #555;
+    }
+
+    .question span {
+      display: block;
+      color: #777;
+      letter-spacing: 3px;
+      font-size: 9px;
+      margin-bottom: 18px;
+    }
+
+    .question h3 {
+      font-size: 21px;
+      margin-bottom: 12px;
+    }
+
+    .question p {
+      color: #aaa;
+    }
+
+    /* ===========================
+       CONCERT
+    ============================ */
+
+    .concert {
+      background:
+        radial-gradient(circle at 50% 30%, #2b0828, #060306 65%);
+    }
+
+    .concert-icon {
+      font-size: 70px;
+      margin-bottom: 35px;
+    }
+
+    /* ===========================
+       POSSIBILITY
+    ============================ */
+
+    .possibility {
+      background:
+        radial-gradient(circle at center, #151515, #020202);
+    }
+
+    .maybe {
+      color: #c8c8c8;
+      font-style: italic;
+    }
+
+    /* ===========================
+       CALCULATOR
+    ============================ */
+
+    .calculator {
+      background: #030303;
+    }
+
+    .terminal {
+      max-width: 750px;
+      margin: 50px auto 0;
+      border: 1px solid #252525;
+      background: #090909;
+      padding: 28px;
+      border-radius: 12px;
+      text-align: left;
+      font-family: "Courier New", monospace;
+      box-shadow: 0 0 80px rgba(255,255,255,.03);
+    }
+
+    .terminal-top {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 30px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #555;
+    }
+
+    .terminal-line {
+      color: #aaa;
+      margin: 16px 0;
+      font-size: 14px;
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+
+    .terminal-line.show {
+      animation: termLine .5s forwards;
+    }
+
+    @keyframes termLine {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .terminal-line strong {
+      color: white;
+    }
+
+    .terminal-result {
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1px solid #222;
+      color: white;
+      font-size: 18px;
+      display: none;
+      line-height: 1.5;
+    }
+
+    /* ===========================
+       TIMELINE
+    ============================ */
+
+    .timeline-scene {
+      background: #080808;
+    }
+
+    .timeline {
+      max-width: 850px;
+      margin: 55px auto 0;
+    }
+
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 20px;
+      padding: 28px 0;
+      border-bottom: 1px solid #222;
+      text-align: left;
+    }
+
+    .month {
+      font-size: 12px;
+      letter-spacing: 4px;
+      color: #777;
+    }
+
+    .trip-name {
+      font-size: clamp(25px, 4vw, 38px);
+      font-family: Georgia, serif;
+      margin-bottom: 8px;
+    }
+
+    .trip-status {
+      color: #999;
+    }
+
+    /* ===========================
+       FINAL PHOTO
+    ============================ */
+
+    .ending {
+      min-height: 130vh;
+    }
+
+    .ending img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(.48);
+    }
+
+    .ending-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(0,0,0,.93), rgba(0,0,0,.05) 70%),
+        linear-gradient(to bottom, rgba(0,0,0,.2), transparent);
+      z-index: 2;
+    }
+
+    .ending-content {
+      position: relative;
+      z-index: 4;
+      text-align: center;
+      width: min(850px, 88%);
+      margin-top: 45vh;
+    }
+
+    .ending-lines p {
+      font-family: Georgia, serif;
+      font-size: clamp(20px, 4vw, 35px);
+      line-height: 1.5;
+      margin: 14px 0;
+    }
+
+    .ending-main {
+      margin-top: 50px !important;
+      font-size: clamp(32px, 6vw, 65px) !important;
+      line-height: 1.1 !important;
+    }
+
+    /* ===========================
+       CREDITS
+    ============================ */
+
+    .credits {
+      min-height: 100vh;
+      background: black;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .credit-title {
+      font-family: Georgia, serif;
+      font-size: clamp(48px, 10vw, 105px);
+      letter-spacing: -4px;
+      margin-bottom: 20px;
+    }
+
+    .credit-sub {
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: #999;
+      margin-bottom: 70px;
+    }
+
+    .credit-list {
+      color: #777;
+      font-size: 12px;
+      line-height: 2.3;
+      letter-spacing: 2px;
+    }
+
+    .maybe-end {
+      margin-top: 55px;
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-size: 25px;
+    }
+
+    /* ===========================
+       SCROLL ICON
+    ============================ */
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      font-size: 9px;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,.5);
+      animation: float 1.8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, 8px); }
+    }
+
+    /* ===========================
+       MOBILE
+    ============================ */
+
+    @media(max-width: 650px) {
+
+      .scene {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .big-title {
+        letter-spacing: -2px;
+      }
+
+      .question-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-row {
+        grid-template-columns: 1fr;
+      }
+
+      .terminal {
+        padding: 20px;
+      }
+
+      .photo-scene {
+        min-height: 105vh;
+      }
+
+      .ending {
+        min-height: 115vh;
+      }
+
+      .ending-content {
+        margin-top: 37vh;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="progress" id="progress"></div>
+
+<!-- ==============================
+     INTRO
+================================ -->
+
+<div id="intro">
+  <div class="intro-content">
+    <div class="tiny">A VERY UNPLANNED PRODUCTION</div>
+
+    <h1>ONE MORE<br>TRIP?</h1>
+
+    <p>
+      A story about two countries, one concert,
+      several schedules and absolutely no clear plan.
+    </p>
+
+    <button class="enter-btn" id="enterBtn">
+      WATCH TRAILER
+    </button>
+  </div>
+</div>
+
+
+<!-- ==============================
+     OPENING
+================================ -->
+
+<section class="scene opening">
+  <div class="scene-inner fade-up">
+
+    <div class="eyebrow">
+      COMING THIS FALL
+    </div>
+
+    <h1 class="big-title">
+      Everything was<br>
+      supposed to be simple.
+    </h1>
+
+    <p class="line">
+      They already had a plan.
+    </p>
+
+  </div>
+
+  <div class="scroll-hint">
+    SCROLL TO CONTINUE ↓
+  </div>
+</section>
+
+
+<!-- ==============================
+     MOROCCO
+================================ -->
+
+<section class="scene morocco">
+
+  <div class="scene-inner fade-up">
+
+    <div class="eyebrow">
+      MID OCTOBER · 2026
+    </div>
+
+    <h1 class="big-title">
+      MOROCCO
+    </h1>
+
+    <p class="subtitle">
+      Kami + Andriana.<br>
+      A holiday.<br>
+      Together.<br><br>
+
+      Finally, something that is actually confirmed.
+    </p>
+
+    <div class="stamp">
+      CONFIRMED ✓
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ==============================
+     TWIST
+================================ -->
+
+<section class="scene twist">
+
+  <div class="scene-inner fade-up">
+
+    <div class="eyebrow">
+      BUT BEFORE MOROCCO...
+    </div>
+
+    <h1 class="big-title glitch">
+      ITALY.
+    </h1>
+
+    <p class="subtitle">
+      And suddenly the plan stopped being simple.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- ==============================
+     KAMI ITALY
+================================ -->
+
+<section class="scene photo-scene">
+
+  <img
+    class="photo-bg"
+    src="IMG_3480.jpeg"
+    alt="Kami"
+  >
+
+  <div class="photo-gradient"></div>
+
+  <div class="photo-text fade-up">
+
+    <div class="eyebrow">
+      CHAPTER ONE
+    </div>
+
+    <h2 class="mid-title">
+      Kami is going to Italy.
+    </h2>
+
+    <p class="subtitle">
+      That part we know.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- ==============================
+     QUESTIONS
+================================ -->
+
+<section class="scene questions">
+
+  <div class="scene-inner fade-up">
+
+    <div class="eyebrow">
+      UNFORTUNATELY
+    </div>
+
+    <h2 class="mid-title">
+      That's basically all we know.
+    </h2>
+
+    <div class="question-grid">
+
+      <div class="question">
+        <span>QUESTION 01</span>
+        <h3>Where is she staying?</h3>
+        <p>Unknown.</p>
+      </div>
+
+      <div class="question">
+        <span>QUESTION 02</span>
+        <h3>For how long?</h3>
+        <p>Also unknown.</p>
+      </div>
+
+      <div class="question">
+        <span>QUESTION 03</span>
+        <h3>Exact dates?</h3>
+        <p>We're working on it.</p>
+      </div>
+
+      <div class="question">
+        <span>QUESTION 04</span>
+        <h3>Does any of this fit the schedule?</h3>
+        <p>Excellent question.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ==============================
+     DORITOS
+================================ -->
+
+<section class="scene photo-scene">
+
+  <img
+    class="photo-bg"
+    src="IMG_3452.jpeg"
+    alt="Kami eating Doritos"
+  >
+
+  <div class="photo-gradient"></div>
+
+  <div class="photo-text fade-up">
+
+    <div class="eyebrow">
+      MEANWHILE
+    </div>
+
+    <h2 class="mid-title">
+      She seems deeply concerned.
+    </h2>
+
+    <p class="subtitle">
+      Very focused on solving the situation.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- ==============================
+     CONCERT
+================================ -->
+
+<section class="scene concert">
+
+  <div class="scene-inner fade-up">
+
+    <div class="concert-icon">
+      🎤
+    </div>
+
+    <div class="eyebrow">
+      THERE IS ALSO...
+    </div>
+
+    <h1 class="big-title">
+      THE<br>CONCERT.
+    </h1>
+
+    <p class="subtitle">
+      A very important concert.<br>
+      One she really wants to go to.
+      <br><br>
+
+      Will Italy interfere with it?
+    </p>
+
+    <p
+      style="
+        margin-top:35px;
+        font-size:28px;
+        font-family:Georgia,serif;
+        font-style:italic;
+      "
+    >
+      Nobody knows.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- ==============================
+     ANDRIANA TWIST
+================================ -->
+
+<section class="scene possibility">
+
+  <div class="scene-inner fade-up">
+
+    <div class="eyebrow">
+      AND THEN...
+    </div>
+
+    <h2 class="mid-title">
+      Another possibility appeared.
+    </h2>
+
+    <p class="subtitle">
+      A slightly dangerous one.
+    </p>
+
+    <div style="height:70px;"></div>
+
+    <h1 class="big-title">
+      ANDRIANA<br>
+      → ITALY?
+    </h1>
+
+    <p class="subtitle maybe">
+      Late September. Maybe.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- ==============================
+     HEAD PHOTO
+================================ -->
+
+<section class="scene photo-scene">
+
+  <img
+    class="photo-bg"
+    src="IMG_9610.jpeg"
+    alt="Andriana and Kami"
+  >
+
+  <div class="photo-gradient"></div>
+
+  <div class="photo-text fade-up">
+
+    <div class="eyebrow">
+      CURRENT SITUATION
+    </div>
+
+    <h2 class="mid-title">
+      Okay...
+      <br>
+      how exactly is this supposed to work?
+    </h2>
+
+  </div>
+
+</section>
+
+
+<!-- ==============================
+     CALCULATOR
+================================ -->
+
+<section class="scene calculator" id="calculator">
+
+  <div class="scene-inner fade-up">
+
+    <div class="eyebrow">
+      INITIATING ADVANCED ANALYSIS
+    </div>
+
+    <h2 class="mid-title">
+      Let's calculate it.
+    </h2>
+
+    <div class="terminal" id="terminal">
+
+      <div class="terminal-top">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div class="terminal-line">
+        Checking Kami's Italy dates...
+        <strong>UNKNOWN</strong>
+      </div>
+
+      <div class="terminal-line">
+        Checking where Kami will stay...
+        <strong>UNKNOWN</strong>
+      </div>
+
+      <div class="terminal-line">
+        Checking concert situation...
+        <strong>COMPLICATED</strong>
+      </div>
+
+      <div class="terminal-line">
+        Checking Andriana's schedule...
+        <strong>LOADING</strong>
+      </div>
+
+      <div class="terminal-line">
+        Checking fencing training...
+        <strong>NON-NEGOTIABLE ⚔</strong>
+      </div>
+
+      <div class="terminal-line">
+        Checking possible Italy trip together...
+        <strong>???</strong>
+      </div>
+
+      <div class="terminal-line">
+        Checking Morocco afterwards...
+        <strong>CONFIRMED ✓</strong>
+      </div>
+
+      <div class="terminal-result" id="terminalResult">
+
+        <strong>ANALYSIS COMPLETE.</strong>
+        <br><br>
+
+        Final conclusion:
+        <br>
+
+        We literally have no idea.
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ==============================
+     TIMELINE
+================================ -->
+
+<section class="scene timeline-scene">
+
+  <div class="scene-inner fade-up">
+
+    <div class="eyebrow">
+      THE CURRENT PLAN
+    </div>
+
+    <h2 class="mid-title">
+      Simple.
+      <br>
+      Obviously.
+    </h2>
+
+    <div class="timeline">
+
+      <div class="timeline-row">
+
+        <div class="month">
+          SEPTEMBER
+        </div>
+
+        <div>
+          <div class="trip-name">
+            🇮🇹 Italy
+          </div>
+
+          <div class="trip-status">
+            Kami: YES
+            <br>
+            Andriana: MAYBE
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="timeline-row">
+
+        <div class="month">
+          SOMEWHERE
+        </div>
+
+        <div>
+
+          <div class="trip-name">
+            🎤 The Concert
+          </div>
+
+          <div class="trip-status">
+            Kami: PLEASE LET THIS WORK
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="timeline-row">
+
+        <div class="month">
+          MID OCTOBER
+        </div>
+
+        <div>
+
+          <div class="trip-name">
+            🇲🇦 Morocco
+          </div>
+
+          <div class="trip-status">
+            Kami: YES
+            <br>
+            Andriana: YES
+            <br><br>
+            Finally.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ==============================
+     FINAL
+================================ -->
+
+<section class="scene ending">
+
+  <img
+    src="IMG_3402.jpeg"
+    alt="Andriana and Kami"
+  >
+
+  <div class="ending-overlay"></div>
+
+  <div class="ending-content fade-up">
+
+    <div class="eyebrow">
+      SO...
+    </div>
+
+    <div class="ending-lines">
+
+      <p>
+        Maybe Italy works.
+      </p>
+
+      <p>
+        Maybe it doesn't.
+      </p>
+
+      <p>
+        Maybe I come with you.
+      </p>
+
+      <p>
+        Maybe I don't.
+      </p>
+
+      <p>
+        Maybe the schedule changes another 47 times.
+      </p>
+
+      <p class="ending-main">
+        But whatever happens...
+        <br><br>
+        we'll find a way.
+        ❤️
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ==============================
+     CREDITS
+================================ -->
+
+<section class="credits">
+
+  <div class="scene-inner fade-up">
+
+    <div class="eyebrow">
+      THE NEXT CHAPTER
+    </div>
+
+    <h1 class="credit-title">
+      ONE MORE<br>
+      TRIP?
+    </h1>
+
+    <div class="credit-sub">
+      THE ITALY CHAPTER
+    </div>
+
+    <div class="credit-list">
+
+      STARRING
+      <br>
+      KAMI & ANDRIANA
+
+      <br><br>
+
+      LOCATIONS
+      <br>
+      ITALY · MOROCCO · PROBABLY A FENCING HALL
+
+      <br><br>
+
+      EXPECTED RELEASE
+      <br>
+      SEPTEMBER 2026
+
+    </div>
+
+    <div class="maybe-end">
+      Maybe.
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<script>
+
+  /* ===========================
+     START TRAILER
+  ============================ */
+
+  const intro = document.getElementById("intro");
+  const enterBtn = document.getElementById("enterBtn");
+
+  enterBtn.addEventListener("click", () => {
+
+    intro.classList.add("hide");
+
+    setTimeout(() => {
+      document.body.classList.add("started");
+    }, 500);
+
+  });
+
+
+  /* ===========================
+     SCROLL REVEALS
+  ============================ */
+
+  const revealElements =
+    document.querySelectorAll(".fade-up");
+
+  const observer = new IntersectionObserver(
+    entries => {
+
+      entries.forEach(entry => {
+
+        if(entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+
+      });
+
+    },
+    {
+      threshold: 0.22
+    }
+  );
+
+  revealElements.forEach(element => {
+    observer.observe(element);
+  });
+
+
+  /* ===========================
+     PROGRESS BAR
+  ============================ */
+
+  const progress =
+    document.getElementById("progress");
+
+  window.addEventListener("scroll", () => {
+
+    const scrollTop =
+      window.scrollY;
+
+    const scrollHeight =
+      document.documentElement.scrollHeight -
+      window.innerHeight;
+
+    const percentage =
+      (scrollTop / scrollHeight) * 100;
+
+    progress.style.width =
+      percentage + "%";
+
+  });
+
+
+  /* ===========================
+     TERMINAL ANIMATION
+  ============================ */
+
+  const calculator =
+    document.getElementById("calculator");
+
+  const terminalLines =
+    document.querySelectorAll(".terminal-line");
+
+  const terminalResult =
+    document.getElementById("terminalResult");
+
+  let terminalPlayed = false;
+
+  const calculatorObserver =
+    new IntersectionObserver(
+      entries => {
+
+        entries.forEach(entry => {
+
+          if(
+            entry.isIntersecting &&
+            !terminalPlayed
+          ) {
+
+            terminalPlayed = true;
+
+            terminalLines.forEach(
+              (line, index) => {
+
+                setTimeout(() => {
+
+                  line.classList.add("show");
+
+                }, index * 700);
+
+              }
+            );
+
+            setTimeout(() => {
+
+              terminalResult.style.display =
+                "block";
+
+              terminalResult.animate(
+                [
+                  {
+                    opacity: 0,
+                    transform:
+                      "translateY(10px)"
+                  },
+                  {
+                    opacity: 1,
+                    transform:
+                      "translateY(0)"
+                  }
+                ],
+                {
+                  duration: 800,
+                  fill: "forwards"
+                }
+              );
+
+            },
+            terminalLines.length * 700 + 700
+            );
+
+          }
+
+        });
+
+      },
+      {
+        threshold: .35
+      }
+    );
+
+  calculatorObserver.observe(calculator);
+
+</script>
+
+</body>
+</html>
