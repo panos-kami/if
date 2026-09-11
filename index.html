@@ -8,10 +8,23 @@
 
 <style>
 
-*{
+/* =========================
+   RESET
+========================= */
+
+*,
+*::before,
+*::after{
   margin:0;
   padding:0;
   box-sizing:border-box;
+}
+
+html,
+body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
 }
 
 html{
@@ -21,8 +34,13 @@ html{
 body{
   background:#050505;
   color:white;
-  font-family:Arial,Helvetica,sans-serif;
-  overflow-x:hidden;
+  font-family:Arial, Helvetica, sans-serif;
+  min-height:100%;
+}
+
+img{
+  display:block;
+  max-width:100%;
 }
 
 ::selection{
@@ -41,13 +59,13 @@ body::before{
   inset:0;
   pointer-events:none;
   z-index:99999;
-  opacity:.04;
+  opacity:.035;
 
   background-image:
-    radial-gradient(circle at 20% 30%,white 1px,transparent 1px),
-    radial-gradient(circle at 70% 80%,white 1px,transparent 1px);
+    radial-gradient(circle at 20% 30%, white 1px, transparent 1px),
+    radial-gradient(circle at 70% 80%, white 1px, transparent 1px);
 
-  background-size:5px 5px,7px 7px;
+  background-size:5px 5px, 7px 7px;
 }
 
 
@@ -61,33 +79,30 @@ body::before{
   left:0;
   width:100%;
   height:3px;
-  background:rgba(255,255,255,.06);
   z-index:9000;
+  background:rgba(255,255,255,.06);
 }
 
 #progress{
   height:100%;
   width:0%;
   background:white;
-  box-shadow:0 0 15px white;
+  box-shadow:0 0 15px rgba(255,255,255,.8);
 }
 
 
 /* =========================
-   CHAPTER NUMBER
+   CHAPTER COUNTER
 ========================= */
 
 .chapter-counter{
   position:fixed;
-
-  right:22px;
-  bottom:20px;
-
+  right:18px;
+  bottom:16px;
   z-index:800;
 
   font-size:9px;
   letter-spacing:3px;
-
   color:rgba(255,255,255,.35);
 
   mix-blend-mode:difference;
@@ -101,15 +116,16 @@ body::before{
 #intro{
   position:fixed;
   inset:0;
-
   z-index:9998;
 
   display:flex;
   justify-content:center;
   align-items:center;
 
+  padding:24px;
+
   background:
-    radial-gradient(circle at center,#1b1b1b,#040404 65%,black);
+    radial-gradient(circle at center, #1b1b1b 0%, #040404 65%, black 100%);
 
   transition:
     opacity 1.2s ease,
@@ -122,57 +138,54 @@ body::before{
 }
 
 .intro-inner{
-  width:min(760px,90%);
+  width:100%;
+  max-width:760px;
+  margin:0 auto;
+  padding:0 20px;
   text-align:center;
 }
 
 .label{
   font-size:10px;
-  letter-spacing:6px;
+  letter-spacing:5px;
   color:#999;
-
-  margin-bottom:30px;
+  margin-bottom:28px;
 }
 
 .intro-title{
-  font-family:Georgia,serif;
+  width:100%;
+  max-width:100%;
+  margin:0 auto 28px;
 
-  font-size:clamp(55px,11vw,105px);
+  font-family:Georgia, serif;
+  font-size:clamp(48px, 10vw, 105px);
+  line-height:.86;
+  letter-spacing:-4px;
 
-  line-height:.83;
-
-  letter-spacing:-5px;
-
-  margin-bottom:30px;
+  overflow-wrap:break-word;
 }
 
 .intro-desc{
+  width:100%;
   max-width:520px;
-
-  margin:auto;
+  margin:0 auto;
 
   line-height:1.7;
-
   color:#aaa;
-
   font-size:15px;
 }
 
 .watch-btn{
   margin-top:38px;
-
-  padding:16px 34px;
+  padding:16px 32px;
 
   border-radius:100px;
-
   border:1px solid rgba(255,255,255,.7);
 
   background:transparent;
-
   color:white;
 
   letter-spacing:3px;
-
   font-size:10px;
 
   cursor:pointer;
@@ -193,10 +206,10 @@ body::before{
 
 .scene{
   position:relative;
-
+  width:100%;
   min-height:100vh;
 
-  padding:80px 22px;
+  padding:80px 24px;
 
   display:flex;
   align-items:center;
@@ -206,54 +219,70 @@ body::before{
 }
 
 .inner{
-  width:min(1100px,92%);
-
   position:relative;
   z-index:5;
+
+  width:100%;
+  max-width:1100px;
+
+  margin:0 auto;
+  padding:0 20px;
 
   text-align:center;
 }
 
 .eyebrow{
+  width:100%;
+  max-width:100%;
+
   font-size:10px;
-
-  letter-spacing:6px;
-
+  letter-spacing:5px;
   color:#999;
 
   margin-bottom:28px;
+
+  overflow-wrap:break-word;
 }
 
 .big-title{
-  font-family:Georgia,serif;
+  width:100%;
+  max-width:100%;
+  margin:0 auto;
 
-  font-size:clamp(52px,11vw,130px);
-
-  line-height:.87;
-
+  font-family:Georgia, serif;
+  font-size:clamp(50px, 10vw, 130px);
+  line-height:.88;
   letter-spacing:-5px;
+
+  overflow-wrap:break-word;
+  word-break:normal;
 }
 
 .mid-title{
-  font-family:Georgia,serif;
+  width:100%;
+  max-width:100%;
+  margin:0 auto;
 
-  font-size:clamp(34px,7vw,76px);
-
-  line-height:1;
-
+  font-family:Georgia, serif;
+  font-size:clamp(34px, 7vw, 76px);
+  line-height:1.02;
   letter-spacing:-2px;
+
+  overflow-wrap:break-word;
 }
 
 .subtitle{
+  width:100%;
   max-width:680px;
 
   margin:27px auto 0;
 
-  font-size:clamp(15px,2vw,20px);
-
+  font-size:clamp(15px, 2vw, 20px);
   line-height:1.65;
 
   color:#b6b6b6;
+
+  overflow-wrap:break-word;
 }
 
 .reveal{
@@ -277,44 +306,44 @@ body::before{
 
 .opening{
   background:
-    radial-gradient(circle at center,#242424,#040404 70%);
+    radial-gradient(circle at center, #242424 0%, #040404 70%);
 }
 
 .opening-quote{
+  width:100%;
+  max-width:100%;
+
   margin-top:34px;
 
-  font-family:Georgia,serif;
-
-  font-size:clamp(20px,3vw,30px);
-
+  font-family:Georgia, serif;
+  font-size:clamp(20px, 3vw, 30px);
   font-style:italic;
 
   color:#ccc;
+
+  overflow-wrap:break-word;
 }
 
 .scroll{
   position:absolute;
-
   bottom:28px;
-  left:50%;
+  left:0;
+  right:0;
 
-  transform:translateX(-50%);
+  width:100%;
+  text-align:center;
 
   font-size:8px;
-
   letter-spacing:4px;
-
   color:#666;
 
   animation:bounce 1.8s infinite;
 }
 
 @keyframes bounce{
-
   50%{
-    transform:translate(-50%,8px);
+    transform:translateY(8px);
   }
-
 }
 
 
@@ -324,20 +353,20 @@ body::before{
 
 .morocco{
   background:
-    linear-gradient(to bottom,rgba(0,0,0,.05),rgba(0,0,0,.9)),
-    linear-gradient(120deg,#6c3619,#c1894c,#3b1d14);
+    linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.9)),
+    linear-gradient(120deg, #6c3619, #c1894c, #3b1d14);
 }
 
 .morocco::before{
   content:"";
-
   position:absolute;
 
   width:600px;
+  max-width:80vw;
   height:600px;
+  max-height:80vw;
 
   border-radius:50%;
-
   background:rgba(255,220,160,.08);
 
   filter:blur(70px);
@@ -349,22 +378,24 @@ body::before{
 .confirmed{
   display:inline-block;
 
+  max-width:100%;
+
   margin-top:38px;
+  padding:12px 20px;
 
   border:2px solid white;
 
-  padding:12px 20px;
-
   letter-spacing:4px;
-
   font-size:11px;
 
   transform:rotate(-4deg);
+
+  overflow-wrap:break-word;
 }
 
 
 /* =========================
-   ITALY REVEAL
+   ITALY
 ========================= */
 
 .italy-reveal{
@@ -380,20 +411,21 @@ body::before{
 }
 
 @keyframes glitch{
-
   to{
     transform:translate(2px,-2px);
   }
-
 }
 
 
 /* =========================
-   PHOTOS
+   PHOTO SCENES
 ========================= */
 
 .photo-scene{
+  position:relative;
+  width:100%;
   min-height:115vh;
+  overflow:hidden;
 }
 
 .photo{
@@ -404,6 +436,7 @@ body::before{
   height:100%;
 
   object-fit:cover;
+  object-position:center center;
 
   filter:
     brightness(.47)
@@ -413,20 +446,25 @@ body::before{
 .photo-overlay{
   position:absolute;
   inset:0;
-
   z-index:2;
 
   background:
     linear-gradient(
       to top,
       #050505 0%,
-      rgba(5,5,5,.74) 17%,
+      rgba(5,5,5,.78) 17%,
       transparent 55%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,.15),
+      transparent 35%
     );
 }
 
 .photo-copy{
   position:absolute;
+  z-index:5;
 
   left:0;
   right:0;
@@ -435,40 +473,48 @@ body::before{
   width:100%;
   max-width:900px;
 
-  margin:auto;
-
-  padding:0 25px;
-
-  z-index:5;
+  margin:0 auto;
+  padding:0 26px;
 
   text-align:center;
 }
 
+.photo-copy .mid-title,
+.photo-copy .subtitle,
+.photo-copy .eyebrow{
+  width:100%;
+  max-width:100%;
+
+  overflow-wrap:break-word;
+  word-break:normal;
+}
+
 
 /* =========================
-   UNKNOWN QUESTIONS
+   QUESTIONS
 ========================= */
 
 .questions{
   background:
-    radial-gradient(circle,#111,#050505 70%);
+    radial-gradient(circle, #111 0%, #050505 70%);
 }
 
 .question-grid{
-  display:grid;
+  width:100%;
+  max-width:900px;
 
-  grid-template-columns:repeat(2,1fr);
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
 
   gap:14px;
-
-  max-width:900px;
 
   margin:55px auto 0;
 }
 
 .card{
+  min-width:0;
+  width:100%;
   padding:30px;
-
   min-height:165px;
 
   text-align:left;
@@ -476,35 +522,38 @@ body::before{
   border:1px solid #242424;
 
   background:
-    linear-gradient(145deg,#131313,#090909);
+    linear-gradient(145deg, #131313, #090909);
 
   transition:.3s;
 }
 
 .card:hover{
   transform:translateY(-6px);
-
   border-color:#666;
 }
 
 .card-number{
   font-size:9px;
-
   letter-spacing:3px;
-
   color:#777;
-
   margin-bottom:18px;
 }
 
 .card h3{
+  max-width:100%;
+
   font-size:21px;
+  line-height:1.2;
 
   margin-bottom:13px;
+
+  overflow-wrap:break-word;
 }
 
 .answer{
+  max-width:100%;
   color:#aaa;
+  overflow-wrap:break-word;
 }
 
 
@@ -514,16 +563,17 @@ body::before{
 
 .doritos-tag{
   display:inline-block;
+  max-width:100%;
 
   margin-top:24px;
+  padding:10px 16px;
 
   font-size:11px;
-
   letter-spacing:3px;
 
   border:1px solid rgba(255,255,255,.4);
 
-  padding:10px 16px;
+  overflow-wrap:break-word;
 }
 
 
@@ -533,48 +583,53 @@ body::before{
 
 .concert{
   background:
-    radial-gradient(circle at 50% 30%,#35102f,#080307 60%,black);
+    radial-gradient(circle at 50% 30%, #35102f, #080307 60%, black);
 }
 
 .mic{
   font-size:70px;
-
   margin-bottom:30px;
 }
 
 .unknown{
+  width:100%;
+  max-width:100%;
+
   margin-top:35px;
 
-  font-family:Georgia,serif;
-
+  font-family:Georgia, serif;
   font-style:italic;
-
   font-size:30px;
+
+  overflow-wrap:break-word;
 }
 
 
 /* =========================
-   PANAGIOTIS REVEAL
+   PANAGIOTIS
 ========================= */
 
 .panagiotis{
   background:
-    radial-gradient(circle,#191919,#020202 70%);
+    radial-gradient(circle, #191919, #020202 70%);
 }
 
 .name-list{
+  width:100%;
+  max-width:100%;
+
   margin-top:25px;
 
   color:#777;
-
   font-size:10px;
-
   letter-spacing:4px;
+  line-height:1.8;
+
+  overflow-wrap:break-word;
 }
 
 .arrow{
   margin:45px 0;
-
   font-size:50px;
 }
 
@@ -585,34 +640,31 @@ body::before{
 
 .system{
   background:
-    radial-gradient(circle at 50% 10%,#131313,#020202 70%);
+    radial-gradient(circle at 50% 10%, #131313, #020202 70%);
 }
 
 .terminal{
+  width:100%;
   max-width:760px;
 
   margin:50px auto;
-
   padding:28px;
 
   border:1px solid #292929;
-
   border-radius:14px;
 
   background:#090909;
 
   text-align:left;
 
-  font-family:"Courier New",monospace;
+  font-family:"Courier New", monospace;
 
   box-shadow:0 0 80px rgba(255,255,255,.04);
 }
 
 .terminal-header{
   display:flex;
-
   gap:8px;
-
   margin-bottom:30px;
 }
 
@@ -620,21 +672,27 @@ body::before{
   width:10px;
   height:10px;
 
-  border-radius:50%;
+  flex:0 0 10px;
 
+  border-radius:50%;
   background:#555;
 }
 
 .term{
-  opacity:0;
+  width:100%;
+  max-width:100%;
 
+  opacity:0;
   transform:translateX(-10px);
 
   margin:17px 0;
 
   color:#aaa;
-
   font-size:14px;
+  line-height:1.55;
+
+  overflow-wrap:anywhere;
+  word-break:break-word;
 }
 
 .term.show{
@@ -642,13 +700,10 @@ body::before{
 }
 
 @keyframes showTerm{
-
   to{
     opacity:1;
-
     transform:none;
   }
-
 }
 
 .term strong{
@@ -658,42 +713,40 @@ body::before{
 .result{
   display:none;
 
-  margin-top:30px;
+  width:100%;
+  max-width:100%;
 
+  margin-top:30px;
   padding-top:25px;
 
   border-top:1px solid #222;
 
   line-height:1.6;
-
   font-size:18px;
+
+  overflow-wrap:break-word;
 }
-
-
-/* =========================
-   RE-CALCULATE BUTTON
-========================= */
 
 .recalc{
   display:none;
 
-  margin:28px auto 0;
+  max-width:100%;
 
+  margin:28px auto 0;
   padding:13px 25px;
 
   border:1px solid #555;
+  border-radius:50px;
 
   background:none;
-
   color:white;
-
-  border-radius:50px;
 
   cursor:pointer;
 
   font-size:10px;
-
   letter-spacing:3px;
+
+  white-space:normal;
 }
 
 .recalc:hover{
@@ -711,15 +764,16 @@ body::before{
 }
 
 .timeline{
+  width:100%;
   max-width:850px;
-
   margin:55px auto 0;
 }
 
 .time-row{
-  display:grid;
+  width:100%;
 
-  grid-template-columns:135px 1fr;
+  display:grid;
+  grid-template-columns:minmax(0,135px) minmax(0,1fr);
 
   padding:30px 0;
 
@@ -731,25 +785,36 @@ body::before{
 }
 
 .time-month{
+  min-width:0;
+
   color:#777;
-
   font-size:10px;
-
   letter-spacing:4px;
+  line-height:1.5;
+
+  overflow-wrap:break-word;
 }
 
 .time-title{
-  font-family:Georgia,serif;
+  width:100%;
+  max-width:100%;
 
+  font-family:Georgia, serif;
   font-size:35px;
 
   margin-bottom:10px;
+
+  overflow-wrap:break-word;
 }
 
 .time-status{
-  line-height:1.7;
+  width:100%;
+  max-width:100%;
 
+  line-height:1.7;
   color:#999;
+
+  overflow-wrap:break-word;
 }
 
 
@@ -758,18 +823,21 @@ body::before{
 ========================= */
 
 .ending{
+  position:relative;
+  width:100%;
   min-height:130vh;
+  overflow:hidden;
 }
 
 .ending-photo{
   position:absolute;
-
   inset:0;
 
   width:100%;
   height:100%;
 
   object-fit:cover;
+  object-position:center center;
 
   filter:brightness(.52);
 }
@@ -777,7 +845,6 @@ body::before{
 .ending-overlay{
   position:absolute;
   inset:0;
-
   z-index:2;
 
   background:
@@ -791,93 +858,117 @@ body::before{
 
 .ending-copy{
   position:relative;
-
   z-index:5;
 
-  width:min(850px,92%);
+  width:100%;
+  max-width:850px;
 
-  margin-top:45vh;
+  margin:45vh auto 0;
+  padding:0 24px;
 
   text-align:center;
 }
 
 .ending-copy p{
-  font-family:Georgia,serif;
+  width:100%;
+  max-width:100%;
 
-  font-size:clamp(20px,4vw,34px);
+  font-family:Georgia, serif;
+  font-size:clamp(20px, 4vw, 34px);
 
-  margin:15px 0;
+  margin:15px auto;
 
   line-height:1.5;
+
+  overflow-wrap:break-word;
 }
 
 .final-line{
   margin-top:50px !important;
 
-  font-size:clamp(35px,6vw,65px) !important;
+  font-size:clamp(35px, 6vw, 65px) !important;
 
   line-height:1.1 !important;
 }
 
 
 /* =========================
-   FINAL POSTER
+   POSTER
 ========================= */
 
 .poster{
+  position:relative;
+  width:100%;
   min-height:100vh;
 
   display:flex;
-
   align-items:center;
   justify-content:center;
 
+  padding:80px 24px;
+
   background:
-    radial-gradient(circle,#151515,#000 70%);
+    radial-gradient(circle, #151515, #000 70%);
 
   text-align:center;
 }
 
+.poster .inner{
+  width:100%;
+  max-width:900px;
+}
+
 .poster-title{
-  font-family:Georgia,serif;
+  width:100%;
+  max-width:100%;
 
-  font-size:clamp(55px,11vw,110px);
+  font-family:Georgia, serif;
+  font-size:clamp(52px, 10vw, 110px);
 
-  line-height:.83;
-
+  line-height:.86;
   letter-spacing:-5px;
+
+  overflow-wrap:break-word;
 }
 
 .poster-sub{
+  width:100%;
+  max-width:100%;
+
   margin-top:25px;
 
   font-size:11px;
-
   letter-spacing:5px;
-
   color:#999;
+
+  overflow-wrap:break-word;
 }
 
 .credits{
+  width:100%;
+  max-width:100%;
+
   margin-top:65px;
 
   color:#777;
-
   font-size:10px;
-
   line-height:2.4;
-
   letter-spacing:2px;
+
+  overflow-wrap:break-word;
 }
 
 .maybe-final{
+  width:100%;
+  max-width:100%;
+
   margin-top:50px;
 
-  font-family:Georgia,serif;
-
+  font-family:Georgia, serif;
   font-size:26px;
-
   font-style:italic;
+
+  overflow-wrap:break-word;
 }
 
 
@@ -888,29 +979,80 @@ body::before{
 @media(max-width:650px){
 
   .scene{
-    padding:65px 18px;
+    padding:65px 14px;
+  }
+
+  .inner{
+    width:100%;
+    max-width:100%;
+
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .intro-inner{
+    width:100%;
+    max-width:100%;
+
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  .intro-title{
+    font-size:clamp(46px, 16vw, 76px);
+    line-height:.9;
+    letter-spacing:-2px;
+  }
+
+  .label{
+    font-size:8px;
+    letter-spacing:3px;
+    line-height:1.6;
   }
 
   .big-title{
+    font-size:clamp(42px, 14vw, 70px);
+    line-height:.96;
     letter-spacing:-2px;
   }
 
   .mid-title{
+    font-size:clamp(30px, 10vw, 44px);
+    line-height:1.06;
     letter-spacing:-1px;
+  }
+
+  .subtitle{
+    width:100%;
+    max-width:100%;
+
+    font-size:15px;
+    line-height:1.55;
+  }
+
+  .eyebrow{
+    font-size:8px;
+    letter-spacing:3px;
+    line-height:1.6;
   }
 
   .question-grid{
     grid-template-columns:1fr;
+    width:100%;
   }
 
-  .time-row{
-    grid-template-columns:1fr;
-
-    gap:10px;
+  .card{
+    width:100%;
+    min-width:0;
+    padding:24px 20px;
   }
 
   .photo-scene{
     min-height:105vh;
+  }
+
+  .photo{
+    object-position:center center;
   }
 
   .photo-copy{
@@ -918,20 +1060,52 @@ body::before{
     right:0;
 
     width:100%;
+    max-width:100%;
 
+    margin:0 auto;
     padding:0 20px;
 
     bottom:7vh;
   }
 
   .photo-copy .mid-title{
-    font-size:34px;
+    font-size:clamp(30px, 9vw, 38px);
+    line-height:1.08;
+  }
 
-    line-height:1.05;
+  .photo-copy .subtitle{
+    font-size:15px;
+    line-height:1.55;
   }
 
   .terminal{
-    padding:20px;
+    width:100%;
+    max-width:100%;
+
+    padding:20px 16px;
+
+    overflow:hidden;
+  }
+
+  .term{
+    font-size:12px;
+    line-height:1.6;
+
+    overflow-wrap:anywhere;
+    word-break:break-word;
+  }
+
+  .result{
+    font-size:15px;
+  }
+
+  .time-row{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .time-title{
+    font-size:28px;
   }
 
   .ending{
@@ -939,13 +1113,58 @@ body::before{
   }
 
   .ending-copy{
+    width:100%;
+    max-width:100%;
+
     margin-top:38vh;
+
+    padding-left:18px;
+    padding-right:18px;
+  }
+
+  .ending-copy p{
+    font-size:clamp(19px, 6vw, 28px);
+  }
+
+  .final-line{
+    font-size:clamp(32px, 10vw, 46px) !important;
+  }
+
+  .poster{
+    padding:70px 14px;
+  }
+
+  .poster .inner{
+    width:100%;
+    max-width:100%;
+
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .poster-title{
+    font-size:clamp(46px, 16vw, 76px);
+    line-height:.9;
+    letter-spacing:-2px;
+  }
+
+  .poster-sub{
+    font-size:9px;
+    letter-spacing:3px;
+    line-height:1.6;
+  }
+
+  .credits{
+    font-size:9px;
+    line-height:2.2;
+    letter-spacing:1.5px;
   }
 
   .chapter-counter{
-    right:14px;
+    right:10px;
+    bottom:10px;
 
-    bottom:12px;
+    font-size:8px;
   }
 
 }
@@ -999,9 +1218,8 @@ body::before{
 </div>
 
 
-
 <!-- =========================
-     1
+     1 OPENING
 ========================= -->
 
 <section class="scene opening chapter">
@@ -1029,7 +1247,6 @@ body::before{
   </div>
 
 </section>
-
 
 
 <!-- =========================
@@ -1069,7 +1286,6 @@ body::before{
 </section>
 
 
-
 <!-- =========================
      3 ITALY
 ========================= -->
@@ -1095,9 +1311,8 @@ body::before{
 </section>
 
 
-
 <!-- =========================
-     4 KAMI PHOTO
+     4 KAMI
 ========================= -->
 
 <section class="scene photo-scene chapter">
@@ -1105,6 +1320,7 @@ body::before{
   <img
     src="IMG_3480.jpeg"
     class="photo"
+    alt=""
   >
 
   <div class="photo-overlay"></div>
@@ -1122,13 +1338,13 @@ body::before{
     <p class="subtitle">
       That part is confirmed.
       <br><br>
+
       Everything after that is a mystery.
     </p>
 
   </div>
 
 </section>
-
 
 
 <!-- =========================
@@ -1223,7 +1439,6 @@ body::before{
 </section>
 
 
-
 <!-- =========================
      6 DORITOS
 ========================= -->
@@ -1233,6 +1448,7 @@ body::before{
   <img
     src="IMG_3452.jpeg"
     class="photo"
+    alt=""
   >
 
   <div class="photo-overlay"></div>
@@ -1262,7 +1478,6 @@ body::before{
 </section>
 
 
-
 <!-- =========================
      7 CONCERT
 ========================= -->
@@ -1288,6 +1503,7 @@ body::before{
     <p class="subtitle">
       A very important concert.
       <br>
+
       A concert she really wants to attend.
       <br><br>
 
@@ -1301,7 +1517,6 @@ body::before{
   </div>
 
 </section>
-
 
 
 <!-- =========================
@@ -1347,9 +1562,8 @@ body::before{
 </section>
 
 
-
 <!-- =========================
-     9 HEAD PHOTO
+     9 PHOTO
 ========================= -->
 
 <section class="scene photo-scene chapter">
@@ -1357,6 +1571,7 @@ body::before{
   <img
     src="IMG_9610.jpeg"
     class="photo"
+    alt=""
   >
 
   <div class="photo-overlay"></div>
@@ -1378,7 +1593,6 @@ body::before{
   </div>
 
 </section>
-
 
 
 <!-- =========================
@@ -1461,6 +1675,7 @@ body::before{
 
         Probability of everything
         going exactly according to plan:
+
         <br><br>
 
         <strong style="font-size:30px;">
@@ -1492,7 +1707,6 @@ body::before{
   </div>
 
 </section>
-
 
 
 <!-- =========================
@@ -1556,7 +1770,7 @@ body::before{
 
           <div class="time-status">
             Current status:
-            <br>
+            <br><br>
 
             PLEASE DO NOT LET ITALY DESTROY THIS.
           </div>
@@ -1599,9 +1813,8 @@ body::before{
 </section>
 
 
-
 <!-- =========================
-     12 END
+     12 ENDING
 ========================= -->
 
 <section class="scene ending chapter">
@@ -1609,6 +1822,7 @@ body::before{
   <img
     src="IMG_3402.jpeg"
     class="ending-photo"
+    alt=""
   >
 
   <div class="ending-overlay"></div>
@@ -1654,7 +1868,6 @@ body::before{
 </section>
 
 
-
 <!-- =========================
      POSTER
 ========================= -->
@@ -1693,6 +1906,7 @@ body::before{
       <br>
 
       KAMI & THEO
+
       <br><br>
 
       LOCATIONS
@@ -1721,7 +1935,6 @@ body::before{
 </section>
 
 
-
 <script>
 
 /* =========================
@@ -1733,7 +1946,7 @@ document.getElementById("intro");
 
 document
 .getElementById("watch")
-.addEventListener("click",()=>{
+.addEventListener("click", () => {
 
   intro.classList.add("hide");
 
@@ -1741,13 +1954,13 @@ document
 
 
 /* =========================
-   REVEALS
+   REVEAL
 ========================= */
 
 const revealObserver =
-new IntersectionObserver(entries=>{
+new IntersectionObserver(entries => {
 
-  entries.forEach(entry=>{
+  entries.forEach(entry => {
 
     if(entry.isIntersecting){
 
@@ -1764,7 +1977,7 @@ new IntersectionObserver(entries=>{
 
 document
 .querySelectorAll(".reveal")
-.forEach(el=>{
+.forEach(el => {
 
   revealObserver.observe(el);
 
@@ -1778,17 +1991,19 @@ document
 const progress =
 document.getElementById("progress");
 
-window.addEventListener("scroll",()=>{
+window.addEventListener("scroll", () => {
 
   const max =
-  document.documentElement.scrollHeight -
-  window.innerHeight;
+    document.documentElement.scrollHeight -
+    window.innerHeight;
 
   const percentage =
-  (window.scrollY/max)*100;
+    max > 0
+      ? (window.scrollY / max) * 100
+      : 0;
 
   progress.style.width =
-  percentage+"%";
+    percentage + "%";
 
 });
 
@@ -1804,21 +2019,21 @@ const counter =
 document.getElementById("counter");
 
 const chapterObserver =
-new IntersectionObserver(entries=>{
+new IntersectionObserver(entries => {
 
-  entries.forEach(entry=>{
+  entries.forEach(entry => {
 
     if(entry.isIntersecting){
 
       const index =
-      [...chapters].indexOf(entry.target)+1;
+        [...chapters].indexOf(entry.target) + 1;
 
       counter.innerText =
-      String(index).padStart(2,"0")
-      +
-      " / "
-      +
-      String(chapters.length).padStart(2,"0");
+        String(index).padStart(2,"0")
+        +
+        " / "
+        +
+        String(chapters.length).padStart(2,"0");
 
     }
 
@@ -1829,7 +2044,7 @@ new IntersectionObserver(entries=>{
 });
 
 
-chapters.forEach(chapter=>{
+chapters.forEach(chapter => {
 
   chapterObserver.observe(chapter);
 
@@ -1852,79 +2067,79 @@ document.getElementById("result");
 const recalc =
 document.getElementById("recalc");
 
-let played=false;
+let played = false;
 
 
 function runSystem(){
 
-  lines.forEach(line=>{
+  lines.forEach(line => {
 
     line.classList.remove("show");
 
   });
 
-  result.style.display="none";
+  result.style.display = "none";
+  recalc.style.display = "none";
 
-  recalc.style.display="none";
 
+  lines.forEach((line,index) => {
 
-  lines.forEach((line,index)=>{
-
-    setTimeout(()=>{
+    setTimeout(() => {
 
       line.classList.add("show");
 
-    },index*580);
+    }, index * 580);
 
   });
 
 
-  setTimeout(()=>{
+  setTimeout(() => {
 
-    result.style.display="block";
+    result.style.display = "block";
 
     result.animate(
+
       [
         {
           opacity:0,
           transform:"translateY(15px)"
         },
-
         {
           opacity:1,
           transform:"translateY(0)"
         }
       ],
+
       {
         duration:700,
         fill:"forwards"
       }
+
     );
 
-  },lines.length*580+600);
+  }, lines.length * 580 + 600);
 
 
-  setTimeout(()=>{
+  setTimeout(() => {
 
-    recalc.style.display="block";
+    recalc.style.display = "block";
 
-  },lines.length*580+1600);
+  }, lines.length * 580 + 1600);
 
 }
 
 
 const systemObserver =
-new IntersectionObserver(entries=>{
+new IntersectionObserver(entries => {
 
-  entries.forEach(entry=>{
+  entries.forEach(entry => {
 
     if(
       entry.isIntersecting &&
       !played
     ){
 
-      played=true;
-
+      played = true;
       runSystem();
 
     }
@@ -1941,15 +2156,15 @@ systemObserver.observe(systemScene);
 
 recalc.addEventListener(
   "click",
-  ()=>{
+  () => {
 
-    recalc.innerText=
-    "STILL CALCULATING...";
+    recalc.innerText =
+      "STILL CALCULATING...";
 
-    setTimeout(()=>{
+    setTimeout(() => {
 
-      recalc.innerText=
-      "RECALCULATE";
+      recalc.innerText =
+        "RECALCULATE";
 
       runSystem();
 
