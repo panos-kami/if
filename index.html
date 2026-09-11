@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">  
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,6 +28,56 @@
       overflow-y: auto;
     }
 
+    ::selection {
+      background: white;
+      color: black;
+    }
+
+    /* ===========================
+       FILM GRAIN
+    ============================ */
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 99999;
+      opacity: 0.035;
+
+      background-image:
+        radial-gradient(circle at 20% 20%, white 1px, transparent 1px),
+        radial-gradient(circle at 80% 70%, white 1px, transparent 1px);
+
+      background-size: 4px 4px, 5px 5px;
+      mix-blend-mode: soft-light;
+    }
+
+    /* ===========================
+       PROGRESS
+    ============================ */
+
+    .progress-wrap {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      z-index: 9999;
+      background: rgba(255,255,255,.05);
+    }
+
+    .progress {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        white,
+        #d6d6d6
+      );
+      box-shadow: 0 0 12px rgba(255,255,255,.45);
+    }
+
     /* ===========================
        INTRO
     ============================ */
@@ -35,13 +85,18 @@
     #intro {
       position: fixed;
       inset: 0;
-      z-index: 9999;
+      z-index: 9998;
+
       background:
-        radial-gradient(circle at center, #191919 0%, #050505 55%, #000 100%);
+        radial-gradient(circle at center, #1d1d1d 0%, #070707 45%, #000 100%);
+
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: opacity 1.2s ease, visibility 1.2s ease;
+
+      transition:
+        opacity 1.2s ease,
+        visibility 1.2s ease;
     }
 
     #intro.hide {
@@ -50,105 +105,122 @@
     }
 
     .intro-content {
+      width: min(760px, 90%);
       text-align: center;
-      width: 90%;
-      max-width: 700px;
     }
 
     .tiny {
       letter-spacing: 5px;
-      font-size: 11px;
-      color: #aaa;
+      font-size: 10px;
+      color: #9a9a9a;
       margin-bottom: 25px;
     }
 
     .intro-content h1 {
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(44px, 9vw, 96px);
-      letter-spacing: -3px;
-      line-height: 0.9;
-      margin-bottom: 22px;
+      font-size: clamp(50px, 10vw, 100px);
+      line-height: .85;
+      letter-spacing: -4px;
+      margin-bottom: 25px;
     }
 
     .intro-content p {
+      max-width: 520px;
+      margin: 0 auto 35px;
       color: #aaa;
       font-size: 15px;
-      margin-bottom: 35px;
+      line-height: 1.7;
     }
 
     .enter-btn {
-      border: 1px solid rgba(255,255,255,.7);
+      border: 1px solid rgba(255,255,255,.75);
       background: transparent;
       color: white;
-      padding: 16px 34px;
+
+      padding: 15px 34px;
+
       border-radius: 100px;
-      font-size: 12px;
+
+      font-size: 11px;
       letter-spacing: 3px;
+
       cursor: pointer;
-      transition: .3s;
+
+      transition:
+        background .3s ease,
+        color .3s ease,
+        transform .3s ease;
     }
 
     .enter-btn:hover {
       background: white;
       color: black;
+      transform: translateY(-2px);
     }
 
     /* ===========================
-       GENERAL SCENES
+       GENERAL
     ============================ */
 
     .scene {
-      min-height: 100vh;
       position: relative;
+      min-height: 100vh;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
       overflow: hidden;
-      padding: 70px 24px;
+
+      padding: 80px 24px;
     }
 
     .scene-inner {
+      width: min(1100px, 92%);
       position: relative;
       z-index: 4;
-      width: min(1100px, 92%);
       text-align: center;
     }
 
     .eyebrow {
-      color: #aaa;
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 6px;
+      color: #aaa;
       text-transform: uppercase;
-      margin-bottom: 25px;
+      margin-bottom: 28px;
     }
 
     .big-title {
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(52px, 11vw, 130px);
-      line-height: .87;
+      font-size: clamp(55px, 11vw, 128px);
+      line-height: .88;
       letter-spacing: -5px;
     }
 
     .mid-title {
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(35px, 7vw, 76px);
-      line-height: 1;
+      font-size: clamp(34px, 7vw, 76px);
+      line-height: 1.02;
+      letter-spacing: -2px;
     }
 
     .subtitle {
-      max-width: 650px;
-      margin: 25px auto 0;
+      max-width: 680px;
+      margin: 26px auto 0;
+
       font-size: clamp(15px, 2vw, 20px);
-      color: #bababa;
       line-height: 1.6;
+
+      color: #bcbcbc;
     }
 
     .fade-up {
       opacity: 0;
-      transform: translateY(40px);
+      transform: translateY(45px);
+
       transition:
-        opacity 1.1s ease,
-        transform 1.1s ease;
+        opacity 1.05s ease,
+        transform 1.05s ease;
     }
 
     .fade-up.visible {
@@ -157,35 +229,58 @@
     }
 
     /* ===========================
-       PROGRESS
-    ============================ */
-
-    .progress {
-      position: fixed;
-      z-index: 999;
-      left: 0;
-      top: 0;
-      height: 2px;
-      width: 0%;
-      background: white;
-    }
-
-    /* ===========================
        OPENING
     ============================ */
 
     .opening {
       background:
-        linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.9)),
-        radial-gradient(circle at 50% 40%, #242424, #050505 70%);
+        linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.88)),
+        radial-gradient(circle at 50% 40%, #252525 0%, #050505 70%);
+    }
+
+    .opening::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          to bottom,
+          transparent 75%,
+          rgba(255,255,255,.02)
+        );
     }
 
     .opening .line {
       font-family: Georgia, serif;
-      font-style: italic;
       font-size: clamp(20px, 3vw, 30px);
-      color: #ddd;
+      font-style: italic;
+      color: #d9d9d9;
       margin-top: 35px;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 26px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      z-index: 10;
+
+      font-size: 8px;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,.5);
+
+      animation: float 1.8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%,100% {
+        transform: translate(-50%,0);
+      }
+
+      50% {
+        transform: translate(-50%,8px);
+      }
     }
 
     /* ===========================
@@ -194,19 +289,35 @@
 
     .morocco {
       background:
-        linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.9)),
-        linear-gradient(120deg, #9b5b28, #d5aa63 45%, #4b2418);
+        linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.87)),
+        linear-gradient(120deg, #7b431d, #c58f4d 45%, #35180f);
+    }
+
+    .morocco::before {
+      content: "";
+      position: absolute;
+      width: 550px;
+      height: 550px;
+      border-radius: 50%;
+      background: rgba(255,214,151,.08);
+      filter: blur(70px);
+      top: 10%;
+      right: -100px;
     }
 
     .stamp {
       display: inline-block;
-      margin-top: 35px;
+
+      margin-top: 38px;
+
       border: 2px solid rgba(255,255,255,.8);
-      padding: 12px 20px;
+      padding: 12px 22px;
+
       transform: rotate(-4deg);
-      font-weight: bold;
+
+      font-size: 11px;
       letter-spacing: 4px;
-      font-size: 12px;
+      font-weight: bold;
     }
 
     /* ===========================
@@ -214,58 +325,104 @@
     ============================ */
 
     .twist {
-      background: black;
+      background:
+        radial-gradient(circle at center, #111 0%, #000 65%);
     }
 
     .glitch {
       position: relative;
-      color: white;
       text-shadow:
-        3px 0 #cf2744,
-        -3px 0 #284cda;
-      animation: glitch 0.25s infinite alternate;
+        3px 0 #b91832,
+        -3px 0 #294ccb;
+
+      animation: glitch .18s infinite alternate;
     }
 
     @keyframes glitch {
-      from { transform: translate(0); }
-      to { transform: translate(2px, -1px); }
+      from {
+        transform: translate(0,0);
+      }
+
+      to {
+        transform: translate(2px,-1px);
+      }
     }
 
     /* ===========================
-       PHOTO FULL
+       PHOTO SCENES
     ============================ */
 
     .photo-scene {
-      min-height: 120vh;
+      min-height: 115vh;
       position: relative;
     }
 
     .photo-bg {
       position: absolute;
       inset: 0;
+
       width: 100%;
       height: 100%;
+
       object-fit: cover;
-      filter: brightness(.42);
+
+      filter:
+        brightness(.48)
+        contrast(1.03)
+        saturate(.95);
+
+      transform: scale(1.02);
     }
 
     .photo-gradient {
       position: absolute;
       inset: 0;
-      background:
-        linear-gradient(to top, #050505 0%, transparent 55%),
-        linear-gradient(to bottom, rgba(0,0,0,.15), transparent 30%);
       z-index: 2;
+
+      background:
+        linear-gradient(
+          to top,
+          rgba(5,5,5,.98) 0%,
+          rgba(5,5,5,.7) 18%,
+          transparent 55%
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(0,0,0,.2) 0%,
+          transparent 30%
+        );
     }
 
     .photo-text {
       position: absolute;
       z-index: 4;
-      bottom: 10vh;
-      left: 50%;
-      transform: translateX(-50%);
-      width: min(900px, 88%);
+
+      left: 0;
+      right: 0;
+      bottom: 8vh;
+
+      width: 100%;
+      max-width: 900px;
+
+      margin: 0 auto;
+      padding: 0 26px;
+
       text-align: center;
+
+      transform: none;
+    }
+
+    .photo-text .mid-title {
+      max-width: 100%;
+      margin: 0 auto;
+      overflow-wrap: break-word;
+      word-break: normal;
+    }
+
+    .photo-text .subtitle {
+      max-width: 620px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     /* ===========================
@@ -273,29 +430,44 @@
     ============================ */
 
     .questions {
-      background: #080808;
+      background:
+        radial-gradient(circle at center, #101010 0%, #060606 70%);
     }
 
     .question-grid {
       margin: 55px auto 0;
-      max-width: 850px;
+
+      max-width: 880px;
+
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
+      gap: 14px;
     }
 
     .question {
-      background: #111;
-      border: 1px solid #222;
+      position: relative;
+
+      min-height: 165px;
+
       padding: 30px;
+
       text-align: left;
-      min-height: 160px;
-      transition: .3s;
+
+      background:
+        linear-gradient(145deg, #121212, #0b0b0b);
+
+      border: 1px solid #242424;
+
+      transition:
+        transform .3s ease,
+        border-color .3s ease,
+        background .3s ease;
     }
 
     .question:hover {
-      transform: translateY(-4px);
-      border-color: #555;
+      transform: translateY(-5px);
+      border-color: #505050;
+      background: #151515;
     }
 
     .question span {
@@ -309,10 +481,12 @@
     .question h3 {
       font-size: 21px;
       margin-bottom: 12px;
+      line-height: 1.2;
     }
 
     .question p {
       color: #aaa;
+      line-height: 1.5;
     }
 
     /* ===========================
@@ -321,12 +495,27 @@
 
     .concert {
       background:
-        radial-gradient(circle at 50% 30%, #2b0828, #060306 65%);
+        radial-gradient(circle at 50% 30%, #37102f 0%, #0a0309 55%, #030303 100%);
+    }
+
+    .concert::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background:
+        repeating-linear-gradient(
+          90deg,
+          transparent 0,
+          transparent 10%,
+          rgba(255,255,255,.015) 10.2%
+        );
     }
 
     .concert-icon {
-      font-size: 70px;
-      margin-bottom: 35px;
+      font-size: 72px;
+      margin-bottom: 30px;
+      filter: drop-shadow(0 0 20px rgba(255,255,255,.12));
     }
 
     /* ===========================
@@ -335,38 +524,49 @@
 
     .possibility {
       background:
-        radial-gradient(circle at center, #151515, #020202);
+        radial-gradient(circle at center, #181818, #020202 72%);
     }
 
     .maybe {
-      color: #c8c8c8;
+      color: #c7c7c7;
       font-style: italic;
     }
 
     /* ===========================
-       CALCULATOR
+       TERMINAL
     ============================ */
 
     .calculator {
-      background: #030303;
+      background:
+        radial-gradient(circle at 50% 20%, #111, #020202 70%);
     }
 
     .terminal {
-      max-width: 750px;
+      max-width: 760px;
       margin: 50px auto 0;
-      border: 1px solid #252525;
-      background: #090909;
+
+      border: 1px solid #272727;
+
+      background:
+        linear-gradient(180deg, #0d0d0d, #080808);
+
       padding: 28px;
-      border-radius: 12px;
+
+      border-radius: 14px;
+
       text-align: left;
+
       font-family: "Courier New", monospace;
-      box-shadow: 0 0 80px rgba(255,255,255,.03);
+
+      box-shadow:
+        0 0 80px rgba(255,255,255,.035),
+        inset 0 1px 0 rgba(255,255,255,.03);
     }
 
     .terminal-top {
       display: flex;
       gap: 8px;
-      margin-bottom: 30px;
+      margin-bottom: 28px;
     }
 
     .dot {
@@ -380,6 +580,7 @@
       color: #aaa;
       margin: 16px 0;
       font-size: 14px;
+
       opacity: 0;
       transform: translateX(-10px);
     }
@@ -400,13 +601,17 @@
     }
 
     .terminal-result {
-      margin-top: 30px;
-      padding-top: 25px;
-      border-top: 1px solid #222;
-      color: white;
-      font-size: 18px;
       display: none;
-      line-height: 1.5;
+
+      margin-top: 28px;
+      padding-top: 24px;
+
+      border-top: 1px solid #222;
+
+      color: white;
+
+      font-size: 18px;
+      line-height: 1.6;
     }
 
     /* ===========================
@@ -414,7 +619,12 @@
     ============================ */
 
     .timeline-scene {
-      background: #080808;
+      background:
+        linear-gradient(
+          to bottom,
+          #080808,
+          #050505
+        );
     }
 
     .timeline {
@@ -424,74 +634,97 @@
 
     .timeline-row {
       display: grid;
-      grid-template-columns: 120px 1fr;
+      grid-template-columns: 130px 1fr;
       gap: 20px;
-      padding: 28px 0;
+
+      padding: 30px 0;
+
       border-bottom: 1px solid #222;
+
       text-align: left;
     }
 
     .month {
-      font-size: 12px;
+      font-size: 11px;
       letter-spacing: 4px;
       color: #777;
     }
 
     .trip-name {
-      font-size: clamp(25px, 4vw, 38px);
+      font-size: clamp(27px, 4vw, 38px);
       font-family: Georgia, serif;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .trip-status {
-      color: #999;
+      color: #a0a0a0;
+      line-height: 1.7;
     }
 
     /* ===========================
-       FINAL PHOTO
+       ENDING
     ============================ */
 
     .ending {
       min-height: 130vh;
+      position: relative;
     }
 
     .ending img {
       position: absolute;
       inset: 0;
+
       width: 100%;
       height: 100%;
+
       object-fit: cover;
-      filter: brightness(.48);
+
+      filter:
+        brightness(.53)
+        contrast(1.02);
     }
 
     .ending-overlay {
       position: absolute;
       inset: 0;
-      background:
-        linear-gradient(to top, rgba(0,0,0,.93), rgba(0,0,0,.05) 70%),
-        linear-gradient(to bottom, rgba(0,0,0,.2), transparent);
       z-index: 2;
+
+      background:
+        linear-gradient(
+          to top,
+          rgba(0,0,0,.95) 0%,
+          rgba(0,0,0,.78) 18%,
+          rgba(0,0,0,.08) 70%
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(0,0,0,.12),
+          transparent 35%
+        );
     }
 
     .ending-content {
+      width: min(850px, 90%);
+
       position: relative;
       z-index: 4;
+
       text-align: center;
-      width: min(850px, 88%);
-      margin-top: 45vh;
+
+      margin-top: 48vh;
     }
 
     .ending-lines p {
       font-family: Georgia, serif;
-      font-size: clamp(20px, 4vw, 35px);
-      line-height: 1.5;
+      font-size: clamp(21px, 4vw, 35px);
+      line-height: 1.45;
       margin: 14px 0;
     }
 
     .ending-main {
       margin-top: 50px !important;
-      font-size: clamp(32px, 6vw, 65px) !important;
-      line-height: 1.1 !important;
+      font-size: clamp(34px, 6vw, 66px) !important;
+      line-height: 1.08 !important;
     }
 
     /* ===========================
@@ -500,22 +733,27 @@
 
     .credits {
       min-height: 100vh;
-      background: black;
-      text-align: center;
+
+      background:
+        radial-gradient(circle at 50% 35%, #111, #000 70%);
+
       display: flex;
       align-items: center;
       justify-content: center;
+
+      text-align: center;
     }
 
     .credit-title {
       font-family: Georgia, serif;
-      font-size: clamp(48px, 10vw, 105px);
+      font-size: clamp(50px, 10vw, 105px);
       letter-spacing: -4px;
-      margin-bottom: 20px;
+      line-height: .85;
+      margin-bottom: 24px;
     }
 
     .credit-sub {
-      font-size: 13px;
+      font-size: 12px;
       letter-spacing: 4px;
       color: #999;
       margin-bottom: 70px;
@@ -523,37 +761,17 @@
 
     .credit-list {
       color: #777;
-      font-size: 12px;
-      line-height: 2.3;
+      font-size: 11px;
+      line-height: 2.4;
       letter-spacing: 2px;
     }
 
     .maybe-end {
-      margin-top: 55px;
+      margin-top: 58px;
+
       font-family: Georgia, serif;
+      font-size: 27px;
       font-style: italic;
-      font-size: 25px;
-    }
-
-    /* ===========================
-       SCROLL ICON
-    ============================ */
-
-    .scroll-hint {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-      font-size: 9px;
-      letter-spacing: 4px;
-      color: rgba(255,255,255,.5);
-      animation: float 1.8s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translate(-50%, 0); }
-      50% { transform: translate(-50%, 8px); }
     }
 
     /* ===========================
@@ -563,12 +781,19 @@
     @media(max-width: 650px) {
 
       .scene {
-        padding-left: 18px;
-        padding-right: 18px;
+        padding: 65px 18px;
+      }
+
+      .intro-content h1 {
+        letter-spacing: -2px;
       }
 
       .big-title {
         letter-spacing: -2px;
+      }
+
+      .mid-title {
+        letter-spacing: -1px;
       }
 
       .question-grid {
@@ -577,6 +802,7 @@
 
       .timeline-row {
         grid-template-columns: 1fr;
+        gap: 10px;
       }
 
       .terminal {
@@ -587,12 +813,45 @@
         min-height: 105vh;
       }
 
+      .photo-bg {
+        object-position: center center;
+      }
+
+      .photo-text {
+        left: 0;
+        right: 0;
+
+        width: 100%;
+        max-width: 100%;
+
+        padding: 0 20px;
+
+        bottom: 7vh;
+
+        margin: 0 auto;
+      }
+
+      .photo-text .mid-title {
+        font-size: 34px;
+        line-height: 1.06;
+      }
+
+      .photo-text .subtitle {
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
       .ending {
         min-height: 115vh;
       }
 
       .ending-content {
-        margin-top: 37vh;
+        margin-top: 39vh;
+        width: 92%;
+      }
+
+      .credit-list {
+        font-size: 10px;
       }
     }
   </style>
@@ -600,17 +859,25 @@
 
 <body>
 
-<div class="progress" id="progress"></div>
+<div class="progress-wrap">
+  <div class="progress" id="progress"></div>
+</div>
 
-<!-- ==============================
-     INTRO
-================================ -->
+
+<!-- INTRO -->
 
 <div id="intro">
-  <div class="intro-content">
-    <div class="tiny">A VERY UNPLANNED PRODUCTION</div>
 
-    <h1>ONE MORE<br>TRIP?</h1>
+  <div class="intro-content">
+
+    <div class="tiny">
+      A VERY UNPLANNED PRODUCTION
+    </div>
+
+    <h1>
+      ONE MORE<br>
+      TRIP?
+    </h1>
 
     <p>
       A story about two countries, one concert,
@@ -620,15 +887,16 @@
     <button class="enter-btn" id="enterBtn">
       WATCH TRAILER
     </button>
+
   </div>
+
 </div>
 
 
-<!-- ==============================
-     OPENING
-================================ -->
+<!-- OPENING -->
 
 <section class="scene opening">
+
   <div class="scene-inner fade-up">
 
     <div class="eyebrow">
@@ -649,12 +917,11 @@
   <div class="scroll-hint">
     SCROLL TO CONTINUE ↓
   </div>
+
 </section>
 
 
-<!-- ==============================
-     MOROCCO
-================================ -->
+<!-- MOROCCO -->
 
 <section class="scene morocco">
 
@@ -669,9 +936,14 @@
     </h1>
 
     <p class="subtitle">
-      Kami + Theo.<br>
-      A holiday.<br>
-      Together.<br><br>
+      Kami + Andriana.
+      <br><br>
+
+      A holiday.
+      <br>
+
+      Together.
+      <br><br>
 
       Finally, something that is actually confirmed.
     </p>
@@ -685,9 +957,7 @@
 </section>
 
 
-<!-- ==============================
-     TWIST
-================================ -->
+<!-- TWIST -->
 
 <section class="scene twist">
 
@@ -710,16 +980,14 @@
 </section>
 
 
-<!-- ==============================
-     KAMI ITALY
-================================ -->
+<!-- KAMI -->
 
 <section class="scene photo-scene">
 
   <img
-    class="photo-bg"
     src="IMG_3480.jpeg"
-    alt="Kami"
+    class="photo-bg"
+    alt=""
   >
 
   <div class="photo-gradient"></div>
@@ -743,9 +1011,7 @@
 </section>
 
 
-<!-- ==============================
-     QUESTIONS
-================================ -->
+<!-- QUESTIONS -->
 
 <section class="scene questions">
 
@@ -763,26 +1029,53 @@
 
       <div class="question">
         <span>QUESTION 01</span>
-        <h3>Where is she staying?</h3>
-        <p>Unknown.</p>
+
+        <h3>
+          Where is she staying?
+        </h3>
+
+        <p>
+          Unknown.
+        </p>
       </div>
+
 
       <div class="question">
         <span>QUESTION 02</span>
-        <h3>For how long?</h3>
-        <p>Also unknown.</p>
+
+        <h3>
+          For how long?
+        </h3>
+
+        <p>
+          Also unknown.
+        </p>
       </div>
+
 
       <div class="question">
         <span>QUESTION 03</span>
-        <h3>Exact dates?</h3>
-        <p>We're working on it.</p>
+
+        <h3>
+          Exact dates?
+        </h3>
+
+        <p>
+          We're working on it.
+        </p>
       </div>
+
 
       <div class="question">
         <span>QUESTION 04</span>
-        <h3>Does any of this fit the schedule?</h3>
-        <p>Excellent question.</p>
+
+        <h3>
+          Does any of this fit the schedule?
+        </h3>
+
+        <p>
+          Excellent question.
+        </p>
       </div>
 
     </div>
@@ -792,16 +1085,14 @@
 </section>
 
 
-<!-- ==============================
-     DORITOS
-================================ -->
+<!-- DORITOS -->
 
 <section class="scene photo-scene">
 
   <img
-    class="photo-bg"
     src="IMG_3452.jpeg"
-    alt="Kami eating Doritos"
+    class="photo-bg"
+    alt=""
   >
 
   <div class="photo-gradient"></div>
@@ -825,9 +1116,7 @@
 </section>
 
 
-<!-- ==============================
-     CONCERT
-================================ -->
+<!-- CONCERT -->
 
 <section class="scene concert">
 
@@ -842,11 +1131,14 @@
     </div>
 
     <h1 class="big-title">
-      THE<br>CONCERT.
+      THE<br>
+      CONCERT.
     </h1>
 
     <p class="subtitle">
-      A very important concert.<br>
+      A very important concert.
+      <br>
+
       One she really wants to go to.
       <br><br>
 
@@ -855,10 +1147,10 @@
 
     <p
       style="
-        margin-top:35px;
-        font-size:28px;
-        font-family:Georgia,serif;
-        font-style:italic;
+        margin-top: 35px;
+        font-size: 29px;
+        font-family: Georgia, serif;
+        font-style: italic;
       "
     >
       Nobody knows.
@@ -869,9 +1161,7 @@
 </section>
 
 
-<!-- ==============================
-     ANDRIANA TWIST
-================================ -->
+<!-- POSSIBILITY -->
 
 <section class="scene possibility">
 
@@ -892,12 +1182,15 @@
     <div style="height:70px;"></div>
 
     <h1 class="big-title">
-      Panos<br>
+      ANDRIANA
+      <br>
       → ITALY?
     </h1>
 
     <p class="subtitle maybe">
-      Late September. Maybe.
+      Late September.
+      <br>
+      Maybe.
     </p>
 
   </div>
@@ -905,16 +1198,14 @@
 </section>
 
 
-<!-- ==============================
-     HEAD PHOTO
-================================ -->
+<!-- HEAD PHOTO -->
 
 <section class="scene photo-scene">
 
   <img
-    class="photo-bg"
     src="IMG_9610.jpeg"
-    alt="Andriana and Kami"
+    class="photo-bg"
+    alt=""
   >
 
   <div class="photo-gradient"></div>
@@ -927,8 +1218,9 @@
 
     <h2 class="mid-title">
       Okay...
-      <br>
-      how exactly is this supposed to work?
+      <br><br>
+      how exactly is this
+      supposed to work?
     </h2>
 
   </div>
@@ -936,9 +1228,7 @@
 </section>
 
 
-<!-- ==============================
-     CALCULATOR
-================================ -->
+<!-- CALCULATOR -->
 
 <section class="scene calculator" id="calculator">
 
@@ -952,7 +1242,7 @@
       Let's calculate it.
     </h2>
 
-    <div class="terminal" id="terminal">
+    <div class="terminal">
 
       <div class="terminal-top">
         <div class="dot"></div>
@@ -976,7 +1266,7 @@
       </div>
 
       <div class="terminal-line">
-        Checking Theo's schedule...
+        Checking Andriana's schedule...
         <strong>LOADING</strong>
       </div>
 
@@ -997,7 +1287,10 @@
 
       <div class="terminal-result" id="terminalResult">
 
-        <strong>ANALYSIS COMPLETE.</strong>
+        <strong>
+          ANALYSIS COMPLETE.
+        </strong>
+
         <br><br>
 
         Final conclusion:
@@ -1014,9 +1307,7 @@
 </section>
 
 
-<!-- ==============================
-     TIMELINE
-================================ -->
+<!-- TIMELINE -->
 
 <section class="scene timeline-scene">
 
@@ -1041,6 +1332,7 @@
         </div>
 
         <div>
+
           <div class="trip-name">
             🇮🇹 Italy
           </div>
@@ -1048,8 +1340,9 @@
           <div class="trip-status">
             Kami: YES
             <br>
-            Panagiotis: MAYBE
+            Andriana: MAYBE
           </div>
+
         </div>
 
       </div>
@@ -1068,7 +1361,8 @@
           </div>
 
           <div class="trip-status">
-            Kami: PLEASE LET THIS WORK
+            Kami:
+            PLEASE LET THIS WORK
           </div>
 
         </div>
@@ -1091,8 +1385,9 @@
           <div class="trip-status">
             Kami: YES
             <br>
-            Panagiotis: YES
+            Andriana: YES
             <br><br>
+
             Finally.
           </div>
 
@@ -1107,15 +1402,13 @@
 </section>
 
 
-<!-- ==============================
-     FINAL
-================================ -->
+<!-- ENDING -->
 
 <section class="scene ending">
 
   <img
     src="IMG_3402.jpeg"
-    alt="Panagiotis and Kami"
+    alt=""
   >
 
   <div class="ending-overlay"></div>
@@ -1145,12 +1438,14 @@
       </p>
 
       <p>
-        Maybe the schedule changes another 47 times.
+        Maybe the schedule changes
+        another 47 times.
       </p>
 
       <p class="ending-main">
         But whatever happens...
         <br><br>
+
         we'll find a way.
         ❤️
       </p>
@@ -1162,9 +1457,7 @@
 </section>
 
 
-<!-- ==============================
-     CREDITS
-================================ -->
+<!-- CREDITS -->
 
 <section class="credits">
 
@@ -1175,7 +1468,8 @@
     </div>
 
     <h1 class="credit-title">
-      ONE MORE<br>
+      ONE MORE
+      <br>
       TRIP?
     </h1>
 
@@ -1187,18 +1481,22 @@
 
       STARRING
       <br>
-      KAMI & PANOS
+
+      KAMI & ANDRIANA
 
       <br><br>
 
       LOCATIONS
       <br>
-      ITALY · MOROCCO · PROBABLY A FENCING HALL
+
+      ITALY · MOROCCO ·
+      PROBABLY A FENCING HALL
 
       <br><br>
 
       EXPECTED RELEASE
       <br>
+
       SEPTEMBER 2026
 
     </div>
@@ -1212,160 +1510,219 @@
 </section>
 
 
-
 <script>
 
   /* ===========================
-     START TRAILER
+     INTRO
   ============================ */
 
-  const intro = document.getElementById("intro");
-  const enterBtn = document.getElementById("enterBtn");
+  const intro =
+    document.getElementById("intro");
 
-  enterBtn.addEventListener("click", () => {
+  const enterBtn =
+    document.getElementById("enterBtn");
 
-    intro.classList.add("hide");
 
-    setTimeout(() => {
-      document.body.classList.add("started");
-    }, 500);
+  enterBtn.addEventListener(
+    "click",
+    () => {
 
-  });
+      intro.classList.add("hide");
+
+      setTimeout(() => {
+
+        document.body.classList.add("started");
+
+      }, 500);
+
+    }
+  );
 
 
   /* ===========================
-     SCROLL REVEALS
+     REVEAL
   ============================ */
 
   const revealElements =
     document.querySelectorAll(".fade-up");
 
-  const observer = new IntersectionObserver(
-    entries => {
 
-      entries.forEach(entry => {
+  const observer =
+    new IntersectionObserver(
 
-        if(entry.isIntersecting) {
-          entry.target.classList.add("visible");
-        }
+      entries => {
 
-      });
+        entries.forEach(
+          entry => {
 
-    },
-    {
-      threshold: 0.22
+            if(entry.isIntersecting) {
+
+              entry.target
+                .classList
+                .add("visible");
+
+            }
+
+          }
+        );
+
+      },
+
+      {
+        threshold: .2
+      }
+
+    );
+
+
+  revealElements.forEach(
+    element => {
+
+      observer.observe(element);
+
     }
   );
 
-  revealElements.forEach(element => {
-    observer.observe(element);
-  });
-
 
   /* ===========================
-     PROGRESS BAR
+     PROGRESS
   ============================ */
 
   const progress =
     document.getElementById("progress");
 
-  window.addEventListener("scroll", () => {
 
-    const scrollTop =
-      window.scrollY;
+  window.addEventListener(
+    "scroll",
+    () => {
 
-    const scrollHeight =
-      document.documentElement.scrollHeight -
-      window.innerHeight;
+      const scrollTop =
+        window.scrollY;
 
-    const percentage =
-      (scrollTop / scrollHeight) * 100;
+      const scrollHeight =
+        document.documentElement.scrollHeight
+        - window.innerHeight;
 
-    progress.style.width =
-      percentage + "%";
+      const percentage =
+        (scrollTop / scrollHeight) * 100;
 
-  });
+      progress.style.width =
+        percentage + "%";
+
+    }
+  );
 
 
   /* ===========================
-     TERMINAL ANIMATION
+     TERMINAL
   ============================ */
 
   const calculator =
     document.getElementById("calculator");
 
   const terminalLines =
-    document.querySelectorAll(".terminal-line");
+    document.querySelectorAll(
+      ".terminal-line"
+    );
 
   const terminalResult =
-    document.getElementById("terminalResult");
+    document.getElementById(
+      "terminalResult"
+    );
 
   let terminalPlayed = false;
 
+
   const calculatorObserver =
     new IntersectionObserver(
+
       entries => {
 
-        entries.forEach(entry => {
+        entries.forEach(
+          entry => {
 
-          if(
-            entry.isIntersecting &&
-            !terminalPlayed
-          ) {
+            if(
+              entry.isIntersecting &&
+              !terminalPlayed
+            ) {
 
-            terminalPlayed = true;
+              terminalPlayed = true;
 
-            terminalLines.forEach(
-              (line, index) => {
 
-                setTimeout(() => {
+              terminalLines.forEach(
+                (line,index) => {
 
-                  line.classList.add("show");
+                  setTimeout(
+                    () => {
 
-                }, index * 700);
+                      line.classList.add(
+                        "show"
+                      );
 
-              }
-            );
+                    },
 
-            setTimeout(() => {
+                    index * 650
 
-              terminalResult.style.display =
-                "block";
+                  );
 
-              terminalResult.animate(
-                [
-                  {
-                    opacity: 0,
-                    transform:
-                      "translateY(10px)"
-                  },
-                  {
-                    opacity: 1,
-                    transform:
-                      "translateY(0)"
-                  }
-                ],
-                {
-                  duration: 800,
-                  fill: "forwards"
                 }
               );
 
-            },
-            terminalLines.length * 700 + 700
-            );
+
+              setTimeout(
+                () => {
+
+                  terminalResult.style.display =
+                    "block";
+
+
+                  terminalResult.animate(
+
+                    [
+                      {
+                        opacity: 0,
+                        transform:
+                          "translateY(10px)"
+                      },
+
+                      {
+                        opacity: 1,
+                        transform:
+                          "translateY(0)"
+                      }
+                    ],
+
+                    {
+                      duration: 800,
+                      fill: "forwards"
+                    }
+
+                  );
+
+                },
+
+                terminalLines.length * 650
+                + 700
+
+              );
+
+            }
 
           }
-
-        });
+        );
 
       },
+
       {
         threshold: .35
       }
+
     );
 
-  calculatorObserver.observe(calculator);
+
+  calculatorObserver.observe(
+    calculator
+  );
 
 </script>
 
