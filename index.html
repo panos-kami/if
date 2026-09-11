@@ -1,1805 +1,1256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>One More Trip?</title>
-
-<style>
-
-/* =========================
-   RESET
-========================= */
-
-*,
-*::before,
-*::after{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-html,
-body{
-  width:100%;
-  max-width:100%;
-  overflow-x:hidden;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
-body{
-  background:#050505;
-  color:white;
-  font-family:Arial, Helvetica, sans-serif;
-  min-height:100%;
-}
-
-img{
-  display:block;
-  max-width:100%;
-}
-
-::selection{
-  background:white;
-  color:black;
-}
-
-
-/* =========================
-   FILM EFFECT
-========================= */
-
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:99999;
-  opacity:.035;
-
-  background-image:
-    radial-gradient(circle at 20% 30%, white 1px, transparent 1px),
-    radial-gradient(circle at 70% 80%, white 1px, transparent 1px);
-
-  background-size:5px 5px, 7px 7px;
-}
-
-
-/* =========================
-   PROGRESS
-========================= */
-
-.progress-track{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:3px;
-  z-index:9000;
-  background:rgba(255,255,255,.06);
-}
-
-#progress{
-  height:100%;
-  width:0%;
-  background:white;
-  box-shadow:0 0 15px rgba(255,255,255,.8);
-}
-
-
-/* =========================
-   CHAPTER COUNTER
-========================= */
-
-.chapter-counter{
-  position:fixed;
-  right:18px;
-  bottom:16px;
-  z-index:800;
-
-  font-size:9px;
-  letter-spacing:3px;
-  color:rgba(255,255,255,.35);
-
-  mix-blend-mode:difference;
-}
-
-
-/* =========================
-   INTRO
-========================= */
-
-#intro{
-  position:fixed;
-  inset:0;
-  z-index:9998;
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-  padding:24px;
-
-  background:
-    radial-gradient(circle at center, #1b1b1b 0%, #040404 65%, black 100%);
-
-  transition:
-    opacity 1.2s ease,
-    visibility 1.2s ease;
-}
-
-#intro.hide{
-  opacity:0;
-  visibility:hidden;
-}
-
-.intro-inner{
-  width:100%;
-  max-width:760px;
-  margin:0 auto;
-  padding:0 20px;
-  text-align:center;
-}
-
-.label{
-  font-size:10px;
-  letter-spacing:5px;
-  color:#999;
-  margin-bottom:28px;
-}
-
-.intro-title{
-  width:100%;
-  max-width:100%;
-  margin:0 auto 28px;
-
-  font-family:Georgia, serif;
-  font-size:clamp(48px, 10vw, 105px);
-  line-height:.86;
-  letter-spacing:-4px;
-
-  overflow-wrap:break-word;
-}
-
-.intro-desc{
-  width:100%;
-  max-width:520px;
-  margin:0 auto;
-
-  line-height:1.7;
-  color:#aaa;
-  font-size:15px;
-}
-
-.watch-btn{
-  margin-top:38px;
-  padding:16px 32px;
-
-  border-radius:100px;
-  border:1px solid rgba(255,255,255,.7);
-
-  background:transparent;
-  color:white;
-
-  letter-spacing:3px;
-  font-size:10px;
-
-  cursor:pointer;
-
-  transition:.3s;
-}
-
-.watch-btn:hover{
-  background:white;
-  color:black;
-  transform:scale(1.04);
-}
-
-
-/* =========================
-   GENERAL
-========================= */
-
-.scene{
-  position:relative;
-  width:100%;
-  min-height:100vh;
-
-  padding:80px 24px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  overflow:hidden;
-}
-
-.inner{
-  position:relative;
-  z-index:5;
-
-  width:100%;
-  max-width:1100px;
-
-  margin:0 auto;
-  padding:0 20px;
-
-  text-align:center;
-}
-
-.eyebrow{
-  width:100%;
-  max-width:100%;
-
-  font-size:10px;
-  letter-spacing:5px;
-  color:#999;
-
-  margin-bottom:28px;
-
-  overflow-wrap:break-word;
-}
-
-.big-title{
-  width:100%;
-  max-width:100%;
-  margin:0 auto;
-
-  font-family:Georgia, serif;
-  font-size:clamp(50px, 10vw, 130px);
-  line-height:.88;
-  letter-spacing:-5px;
-
-  overflow-wrap:break-word;
-  word-break:normal;
-}
-
-.mid-title{
-  width:100%;
-  max-width:100%;
-  margin:0 auto;
-
-  font-family:Georgia, serif;
-  font-size:clamp(34px, 7vw, 76px);
-  line-height:1.02;
-  letter-spacing:-2px;
-
-  overflow-wrap:break-word;
-}
-
-.subtitle{
-  width:100%;
-  max-width:680px;
-
-  margin:27px auto 0;
-
-  font-size:clamp(15px, 2vw, 20px);
-  line-height:1.65;
-
-  color:#b6b6b6;
-
-  overflow-wrap:break-word;
-}
-
-.reveal{
-  opacity:0;
-  transform:translateY(45px);
-
-  transition:
-    opacity 1s ease,
-    transform 1s ease;
-}
-
-.reveal.visible{
-  opacity:1;
-  transform:translateY(0);
-}
-
-
-/* =========================
-   OPENING
-========================= */
-
-.opening{
-  background:
-    radial-gradient(circle at center, #242424 0%, #040404 70%);
-}
-
-.opening-quote{
-  width:100%;
-  max-width:100%;
-
-  margin-top:34px;
-
-  font-family:Georgia, serif;
-  font-size:clamp(20px, 3vw, 30px);
-  font-style:italic;
-
-  color:#ccc;
-
-  overflow-wrap:break-word;
-}
-
-.scroll{
-  position:absolute;
-  bottom:28px;
-  left:0;
-  right:0;
-
-  width:100%;
-  text-align:center;
-
-  font-size:8px;
-  letter-spacing:4px;
-  color:#666;
-
-  animation:bounce 1.8s infinite;
-}
-
-@keyframes bounce{
-  50%{
-    transform:translateY(8px);
-  }
-}
-
-
-/* =========================
-   MOROCCO
-========================= */
-
-.morocco{
-  background:
-    linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.9)),
-    linear-gradient(120deg, #6c3619, #c1894c, #3b1d14);
-}
-
-.morocco::before{
-  content:"";
-  position:absolute;
-
-  width:600px;
-  max-width:80vw;
-  height:600px;
-  max-height:80vw;
-
-  border-radius:50%;
-  background:rgba(255,220,160,.08);
-
-  filter:blur(70px);
-
-  right:-150px;
-  top:10%;
-}
-
-.confirmed{
-  display:inline-block;
-
-  max-width:100%;
-
-  margin-top:38px;
-  padding:12px 20px;
-
-  border:2px solid white;
-
-  letter-spacing:4px;
-  font-size:11px;
-
-  transform:rotate(-4deg);
-
-  overflow-wrap:break-word;
-}
-
-
-/* =========================
-   ITALY
-========================= */
-
-.italy-reveal{
-  background:black;
-}
-
-.italy-text{
-  animation:glitch .2s infinite alternate;
-
-  text-shadow:
-    4px 0 #bc1936,
-    -4px 0 #2546c9;
-}
-
-@keyframes glitch{
-  to{
-    transform:translate(2px,-2px);
-  }
-}
-
-
-/* =========================
-   PHOTO SCENES
-========================= */
-
-.photo-scene{
-  position:relative;
-  width:100%;
-  min-height:115vh;
-  overflow:hidden;
-}
-
-.photo{
-  position:absolute;
-  inset:0;
-
-  width:100%;
-  height:100%;
-
-  object-fit:cover;
-  object-position:center center;
-
-  filter:
-    brightness(.47)
-    contrast(1.04);
-}
-
-.photo-overlay{
-  position:absolute;
-  inset:0;
-  z-index:2;
-
-  background:
-    linear-gradient(
-      to top,
-      #050505 0%,
-      rgba(5,5,5,.78) 17%,
-      transparent 55%
-    ),
-    linear-gradient(
-      to bottom,
-      rgba(0,0,0,.15),
-      transparent 35%
-    );
-}
-
-.photo-copy{
-  position:absolute;
-  z-index:5;
-
-  left:0;
-  right:0;
-  bottom:8vh;
-
-  width:100%;
-  max-width:900px;
-
-  margin:0 auto;
-  padding:0 26px;
-
-  text-align:center;
-}
-
-.photo-copy .mid-title,
-.photo-copy .subtitle,
-.photo-copy .eyebrow{
-  width:100%;
-  max-width:100%;
-
-  overflow-wrap:break-word;
-  word-break:normal;
-}
-
-
-/* =========================
-   QUESTIONS
-========================= */
-
-.questions{
-  background:
-    radial-gradient(circle, #111 0%, #050505 70%);
-}
-
-.question-grid{
-  width:100%;
-  max-width:900px;
-
-  display:grid;
-  grid-template-columns:repeat(2, minmax(0,1fr));
-
-  gap:14px;
-
-  margin:55px auto 0;
-}
-
-.card{
-  min-width:0;
-  width:100%;
-  padding:30px;
-  min-height:165px;
-
-  text-align:left;
-
-  border:1px solid #242424;
-
-  background:
-    linear-gradient(145deg, #131313, #090909);
-
-  transition:.3s;
-}
-
-.card:hover{
-  transform:translateY(-6px);
-  border-color:#666;
-}
-
-.card-number{
-  font-size:9px;
-  letter-spacing:3px;
-  color:#777;
-  margin-bottom:18px;
-}
-
-.card h3{
-  max-width:100%;
-
-  font-size:21px;
-  line-height:1.2;
-
-  margin-bottom:13px;
-
-  overflow-wrap:break-word;
-}
-
-.answer{
-  max-width:100%;
-  color:#aaa;
-  overflow-wrap:break-word;
-}
-
-
-/* =========================
-   DORITOS
-========================= */
-
-.doritos-tag{
-  display:inline-block;
-  max-width:100%;
-
-  margin-top:24px;
-  padding:10px 16px;
-
-  font-size:11px;
-  letter-spacing:3px;
-
-  border:1px solid rgba(255,255,255,.4);
-
-  overflow-wrap:break-word;
-}
-
-
-/* =========================
-   CONCERT
-========================= */
-
-.concert{
-  background:
-    radial-gradient(circle at 50% 30%, #35102f, #080307 60%, black);
-}
-
-.mic{
-  font-size:70px;
-  margin-bottom:30px;
-}
-
-.unknown{
-  width:100%;
-  max-width:100%;
-
-  margin-top:35px;
-
-  font-family:Georgia, serif;
-  font-style:italic;
-  font-size:30px;
-
-  overflow-wrap:break-word;
-}
-
-
-/* =========================
-   PANAGIOTIS
-========================= */
-
-.panagiotis{
-  background:
-    radial-gradient(circle, #191919, #020202 70%);
-}
-
-.name-list{
-  width:100%;
-  max-width:100%;
-
-  margin-top:25px;
-
-  color:#777;
-  font-size:10px;
-  letter-spacing:4px;
-  line-height:1.8;
-
-  overflow-wrap:break-word;
-}
-
-.arrow{
-  margin:45px 0;
-  font-size:50px;
-}
-
-
-/* =========================
-   SYSTEM
-========================= */
-
-.system{
-  background:
-    radial-gradient(circle at 50% 10%, #131313, #020202 70%);
-}
-
-.terminal{
-  width:100%;
-  max-width:760px;
-
-  margin:50px auto;
-  padding:28px;
-
-  border:1px solid #292929;
-  border-radius:14px;
-
-  background:#090909;
-
-  text-align:left;
-
-  font-family:"Courier New", monospace;
-
-  box-shadow:0 0 80px rgba(255,255,255,.04);
-}
-
-.terminal-header{
-  display:flex;
-  gap:8px;
-  margin-bottom:30px;
-}
-
-.dot{
-  width:10px;
-  height:10px;
-
-  flex:0 0 10px;
-
-  border-radius:50%;
-  background:#555;
-}
-
-.term{
-  width:100%;
-  max-width:100%;
-
-  opacity:0;
-  transform:translateX(-10px);
-
-  margin:17px 0;
-
-  color:#aaa;
-  font-size:14px;
-  line-height:1.55;
-
-  overflow-wrap:anywhere;
-  word-break:break-word;
-}
-
-.term.show{
-  animation:showTerm .5s forwards;
-}
-
-@keyframes showTerm{
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-.term strong{
-  color:white;
-}
-
-.result{
-  display:none;
-
-  width:100%;
-  max-width:100%;
-
-  margin-top:30px;
-  padding-top:25px;
-
-  border-top:1px solid #222;
-
-  line-height:1.6;
-  font-size:18px;
-
-  overflow-wrap:break-word;
-}
-
-.recalc{
-  display:none;
-
-  max-width:100%;
-
-  margin:28px auto 0;
-  padding:13px 25px;
-
-  border:1px solid #555;
-  border-radius:50px;
-
-  background:none;
-  color:white;
-
-  cursor:pointer;
-
-  font-size:10px;
-  letter-spacing:3px;
-
-  white-space:normal;
-}
-
-.recalc:hover{
-  background:white;
-  color:black;
-}
-
-
-/* =========================
-   SCHEDULE
-========================= */
-
-.schedule{
-  background:#070707;
-}
-
-.timeline{
-  width:100%;
-  max-width:850px;
-  margin:55px auto 0;
-}
-
-.time-row{
-  width:100%;
-
-  display:grid;
-  grid-template-columns:minmax(0,135px) minmax(0,1fr);
-
-  padding:30px 0;
-
-  border-bottom:1px solid #222;
-
-  gap:20px;
-
-  text-align:left;
-}
-
-.time-month{
-  min-width:0;
-
-  color:#777;
-  font-size:10px;
-  letter-spacing:4px;
-  line-height:1.5;
-
-  overflow-wrap:break-word;
-}
-
-.time-title{
-  width:100%;
-  max-width:100%;
-
-  font-family:Georgia, serif;
-  font-size:35px;
-
-  margin-bottom:10px;
-
-  overflow-wrap:break-word;
-}
-
-.time-status{
-  width:100%;
-  max-width:100%;
-
-  line-height:1.7;
-  color:#999;
-
-  overflow-wrap:break-word;
-}
-
-
-/* =========================
-   ENDING
-========================= */
-
-.ending{
-  position:relative;
-  width:100%;
-  min-height:130vh;
-  overflow:hidden;
-}
-
-.ending-photo{
-  position:absolute;
-  inset:0;
-
-  width:100%;
-  height:100%;
-
-  object-fit:cover;
-  object-position:center center;
-
-  filter:brightness(.52);
-}
-
-.ending-overlay{
-  position:absolute;
-  inset:0;
-  z-index:2;
-
-  background:
-    linear-gradient(
-      to top,
-      rgba(0,0,0,.97),
-      rgba(0,0,0,.75) 20%,
-      transparent 67%
-    );
-}
-
-.ending-copy{
-  position:relative;
-  z-index:5;
-
-  width:100%;
-  max-width:850px;
-
-  margin:45vh auto 0;
-  padding:0 24px;
-
-  text-align:center;
-}
-
-.ending-copy p{
-  width:100%;
-  max-width:100%;
-
-  font-family:Georgia, serif;
-  font-size:clamp(20px, 4vw, 34px);
-
-  margin:15px auto;
-
-  line-height:1.5;
-
-  overflow-wrap:break-word;
-}
-
-.final-line{
-  margin-top:50px !important;
-
-  font-size:clamp(35px, 6vw, 65px) !important;
-
-  line-height:1.1 !important;
-}
-
-
-/* =========================
-   POSTER
-========================= */
-
-.poster{
-  position:relative;
-  width:100%;
-  min-height:100vh;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  padding:80px 24px;
-
-  background:
-    radial-gradient(circle, #151515, #000 70%);
-
-  text-align:center;
-}
-
-.poster .inner{
-  width:100%;
-  max-width:900px;
-}
-
-.poster-title{
-  width:100%;
-  max-width:100%;
-
-  font-family:Georgia, serif;
-  font-size:clamp(52px, 10vw, 110px);
-
-  line-height:.86;
-  letter-spacing:-5px;
-
-  overflow-wrap:break-word;
-}
-
-.poster-sub{
-  width:100%;
-  max-width:100%;
-
-  margin-top:25px;
-
-  font-size:11px;
-  letter-spacing:5px;
-  color:#999;
-
-  overflow-wrap:break-word;
-}
-
-.credits{
-  width:100%;
-  max-width:100%;
-
-  margin-top:65px;
-
-  color:#777;
-  font-size:10px;
-  line-height:2.4;
-  letter-spacing:2px;
-
-  overflow-wrap:break-word;
-}
-
-.maybe-final{
-  width:100%;
-  max-width:100%;
-
-  margin-top:50px;
-
-  font-family:Georgia, serif;
-  font-size:26px;
-  font-style:italic;
-
-  overflow-wrap:break-word;
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:650px){
-
-  .scene{
-    padding:65px 14px;
-  }
-
-  .inner{
-    width:100%;
-    max-width:100%;
-
-    padding-left:14px;
-    padding-right:14px;
-  }
-
-  .intro-inner{
-    width:100%;
-    max-width:100%;
-
-    padding-left:10px;
-    padding-right:10px;
-  }
-
-  .intro-title{
-    font-size:clamp(46px, 16vw, 76px);
-    line-height:.9;
-    letter-spacing:-2px;
-  }
-
-  .label{
-    font-size:8px;
-    letter-spacing:3px;
-    line-height:1.6;
-  }
-
-  .big-title{
-    font-size:clamp(42px, 14vw, 70px);
-    line-height:.96;
-    letter-spacing:-2px;
-  }
-
-  .mid-title{
-    font-size:clamp(30px, 10vw, 44px);
-    line-height:1.06;
-    letter-spacing:-1px;
-  }
-
-  .subtitle{
-    width:100%;
-    max-width:100%;
-
-    font-size:15px;
-    line-height:1.55;
-  }
-
-  .eyebrow{
-    font-size:8px;
-    letter-spacing:3px;
-    line-height:1.6;
-  }
-
-  .question-grid{
-    grid-template-columns:1fr;
-    width:100%;
-  }
-
-  .card{
-    width:100%;
-    min-width:0;
-    padding:24px 20px;
-  }
-
-  .photo-scene{
-    min-height:105vh;
-  }
-
-  .photo{
-    object-position:center center;
-  }
-
-  .photo-copy{
-    left:0;
-    right:0;
-
-    width:100%;
-    max-width:100%;
-
-    margin:0 auto;
-    padding:0 20px;
-
-    bottom:7vh;
-  }
-
-  .photo-copy .mid-title{
-    font-size:clamp(30px, 9vw, 38px);
-    line-height:1.08;
-  }
-
-  .photo-copy .subtitle{
-    font-size:15px;
-    line-height:1.55;
-  }
-
-  .terminal{
-    width:100%;
-    max-width:100%;
-
-    padding:20px 16px;
-
-    overflow:hidden;
-  }
-
-  .term{
-    font-size:12px;
-    line-height:1.6;
-
-    overflow-wrap:anywhere;
-    word-break:break-word;
-  }
-
-  .result{
-    font-size:15px;
-  }
-
-  .time-row{
-    grid-template-columns:1fr;
-    gap:10px;
-  }
-
-  .time-title{
-    font-size:28px;
-  }
-
-  .ending{
-    min-height:115vh;
-  }
-
-  .ending-copy{
-    width:100%;
-    max-width:100%;
-
-    margin-top:38vh;
-
-    padding-left:18px;
-    padding-right:18px;
-  }
-
-  .ending-copy p{
-    font-size:clamp(19px, 6vw, 28px);
-  }
-
-  .final-line{
-    font-size:clamp(32px, 10vw, 46px) !important;
-  }
-
-  .poster{
-    padding:70px 14px;
-  }
-
-  .poster .inner{
-    width:100%;
-    max-width:100%;
-
-    padding-left:14px;
-    padding-right:14px;
-  }
-
-  .poster-title{
-    font-size:clamp(46px, 16vw, 76px);
-    line-height:.9;
-    letter-spacing:-2px;
-  }
-
-  .poster-sub{
-    font-size:9px;
-    letter-spacing:3px;
-    line-height:1.6;
-  }
-
-  .credits{
-    font-size:9px;
-    line-height:2.2;
-    letter-spacing:1.5px;
-  }
-
-  .chapter-counter{
-    right:10px;
-    bottom:10px;
-
-    font-size:8px;
-  }
-
-}
-
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>One More Trip?</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: #070707;
+    }
+
+    body {
+      width: 100%;
+      overflow-x: hidden;
+      background: #070707;
+      color: #f5f5f5;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    ::selection {
+      background: #f4f4f4;
+      color: #080808;
+    }
+
+    /* =========================
+       GLOBAL
+    ========================= */
+
+    .page {
+      width: 100%;
+    }
+
+    .container {
+      width: min(100% - 36px, 980px);
+      margin: 0 auto;
+    }
+
+    .section {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .section-small {
+      padding: 70px 0;
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #7d7d7d;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(42px, 9vw, 90px);
+      line-height: 0.95;
+      letter-spacing: -3px;
+      max-width: 850px;
+    }
+
+    .section-subtitle {
+      margin-top: 24px;
+      max-width: 650px;
+      font-size: clamp(16px, 2vw, 20px);
+      line-height: 1.65;
+      color: #a8a8a8;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .center .section-title,
+    .center .section-subtitle {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================
+       PROGRESS
+    ========================= */
+
+    .progress-wrap {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      z-index: 1000;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: white;
+    }
+
+    /* =========================
+       INTRO
+    ========================= */
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background:
+        radial-gradient(circle at 50% 35%, #202020 0%, #0b0b0b 45%, #050505 75%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(255,255,255,0.015), transparent 15%),
+        linear-gradient(to top, rgba(0,0,0,0.65), transparent 45%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      width: min(100% - 36px, 850px);
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-kicker {
+      font-size: 10px;
+      letter-spacing: 5px;
+      color: #898989;
+      margin-bottom: 26px;
+    }
+
+    .hero-title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(58px, 15vw, 128px);
+      line-height: 0.82;
+      letter-spacing: -5px;
+    }
+
+    .hero-text {
+      max-width: 600px;
+      margin: 30px auto 0;
+      color: #a5a5a5;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .hero-button {
+      margin-top: 36px;
+      padding: 15px 28px;
+      background: transparent;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 100px;
+      letter-spacing: 3px;
+      font-size: 10px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .hero-button:hover {
+      background: white;
+      color: black;
+      border-color: white;
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 28px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 8px;
+      letter-spacing: 4px;
+      color: #555;
+    }
+
+    /* =========================
+       MOROCCO
+    ========================= */
+
+    .morocco {
+      background:
+        linear-gradient(135deg, #5f2f18, #b57c42 46%, #2f1710);
+      color: white;
+    }
+
+    .morocco-card {
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: clamp(32px, 7vw, 70px);
+      background: rgba(0,0,0,0.12);
+      backdrop-filter: blur(4px);
+    }
+
+    .stamp {
+      display: inline-block;
+      margin-top: 34px;
+      padding: 11px 18px;
+      border: 2px solid rgba(255,255,255,0.8);
+      font-size: 11px;
+      letter-spacing: 4px;
+      transform: rotate(-3deg);
+    }
+
+    /* =========================
+       ITALY TWIST
+    ========================= */
+
+    .italy {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      background: #050505;
+    }
+
+    .italy-title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(72px, 19vw, 170px);
+      line-height: 0.85;
+      letter-spacing: -7px;
+      text-align: center;
+      text-shadow:
+        4px 0 0 rgba(180,30,55,0.75),
+        -4px 0 0 rgba(35,65,190,0.65);
+    }
+
+    /* =========================
+       PHOTO CARDS
+    ========================= */
+
+    .photo-card {
+      background: #101010;
+      border: 1px solid #202020;
+      border-radius: 22px;
+      overflow: hidden;
+    }
+
+    .photo-frame {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      background: #111;
+      overflow: hidden;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-content {
+      padding: clamp(26px, 5vw, 48px);
+    }
+
+    .photo-content h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(34px, 7vw, 62px);
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+
+    .photo-content p {
+      margin-top: 20px;
+      color: #a0a0a0;
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 650px;
+    }
+
+    /* =========================
+       CASE FILE
+    ========================= */
+
+    .case-file {
+      background: #0c0c0c;
+    }
+
+    .case-grid {
+      margin-top: 45px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 14px;
+    }
+
+    .case-item {
+      background: #111;
+      border: 1px solid #242424;
+      padding: 26px;
+      min-width: 0;
+    }
+
+    .case-item span {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: #656565;
+      margin-bottom: 15px;
+    }
+
+    .case-item strong {
+      display: block;
+      font-size: 24px;
+      line-height: 1.25;
+      word-break: break-word;
+    }
+
+    .case-item p {
+      color: #8c8c8c;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    /* =========================
+       DORITOS
+    ========================= */
+
+    .doritos-note {
+      display: inline-block;
+      margin-top: 22px;
+      border: 1px solid #3b3b3b;
+      padding: 10px 16px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #c3c3c3;
+    }
+
+    /* =========================
+       CONCERT
+    ========================= */
+
+    .concert {
+      background:
+        radial-gradient(circle at 50% 35%, #351029 0%, #10050e 42%, #050505 75%);
+    }
+
+    .concert-icon {
+      font-size: 62px;
+      margin-bottom: 22px;
+    }
+
+    .concert-small {
+      margin-top: 35px;
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-size: clamp(24px, 5vw, 38px);
+      color: #d0d0d0;
+    }
+
+    /* =========================
+       NEW CHARACTER
+    ========================= */
+
+    .character-card {
+      background: #0e0e0e;
+      border: 1px solid #252525;
+      padding: clamp(32px, 6vw, 64px);
+      text-align: center;
+    }
+
+    .character-name {
+      font-family: Georgia, serif;
+      font-size: clamp(52px, 13vw, 110px);
+      line-height: 0.9;
+      letter-spacing: -4px;
+    }
+
+    .aliases {
+      margin-top: 28px;
+      color: #6f6f6f;
+      font-size: 10px;
+      letter-spacing: 4px;
+      line-height: 2;
+    }
+
+    .maybe-tag {
+      margin-top: 40px;
+      font-size: 13px;
+      letter-spacing: 5px;
+      color: #bdbdbd;
+    }
+
+    /* =========================
+       ANALYSIS
+    ========================= */
+
+    .analysis {
+      background: #050505;
+    }
+
+    .terminal {
+      margin-top: 40px;
+      background: #0a0a0a;
+      border: 1px solid #242424;
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .terminal-top {
+      display: flex;
+      gap: 8px;
+      padding: 16px 18px;
+      border-bottom: 1px solid #222;
+    }
+
+    .terminal-dot {
+      width: 10px;
+      height: 10px;
+      background: #505050;
+      border-radius: 50%;
+    }
+
+    .terminal-body {
+      padding: 25px;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .terminal-row {
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .terminal-row:last-child {
+      border-bottom: none;
+    }
+
+    .terminal-question {
+      color: #777;
+    }
+
+    .terminal-answer {
+      color: #f5f5f5;
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .analysis-result {
+      margin-top: 30px;
+      padding: 28px;
+      background: #111;
+      border: 1px solid #252525;
+      display: none;
+    }
+
+    .analysis-result.show {
+      display: block;
+      animation: resultIn 0.7s ease forwards;
+    }
+
+    @keyframes resultIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .analysis-stat {
+      margin-top: 25px;
+    }
+
+    .analysis-stat span {
+      display: block;
+      font-size: 10px;
+      color: #707070;
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+    }
+
+    .analysis-stat strong {
+      font-family: Georgia, serif;
+      font-size: clamp(40px, 8vw, 70px);
+    }
+
+    .analysis-button {
+      margin-top: 28px;
+      width: 100%;
+      padding: 15px;
+      background: transparent;
+      border: 1px solid #363636;
+      color: white;
+      font-size: 10px;
+      letter-spacing: 3px;
+      cursor: pointer;
+    }
+
+    .analysis-button:hover {
+      background: white;
+      color: black;
+    }
+
+    /* =========================
+       PLAN
+    ========================= */
+
+    .plan-grid {
+      margin-top: 45px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 14px;
+    }
+
+    .plan-card {
+      min-width: 0;
+      background: #101010;
+      border: 1px solid #242424;
+      padding: 30px 24px;
+    }
+
+    .plan-card .emoji {
+      font-size: 34px;
+      margin-bottom: 25px;
+    }
+
+    .plan-card h3 {
+      font-family: Georgia, serif;
+      font-size: 31px;
+      margin-bottom: 18px;
+    }
+
+    .plan-card .status {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #999;
+      line-height: 1.7;
+      word-break: break-word;
+    }
+
+    /* =========================
+       END
+    ========================= */
+
+    .final-card {
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1px solid #242424;
+      background: #0d0d0d;
+    }
+
+    .final-image {
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+    }
+
+    .final-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .final-copy {
+      padding: clamp(30px, 6vw, 60px);
+      text-align: center;
+    }
+
+    .final-lines {
+      font-family: Georgia, serif;
+      font-size: clamp(21px, 4vw, 32px);
+      line-height: 1.6;
+      color: #c7c7c7;
+    }
+
+    .final-big {
+      margin-top: 40px;
+      font-family: Georgia, serif;
+      font-size: clamp(40px, 8vw, 75px);
+      line-height: 1.05;
+      letter-spacing: -3px;
+    }
+
+    /* =========================
+       CREDITS
+    ========================= */
+
+    .credits {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      background: #030303;
+      text-align: center;
+    }
+
+    .credits-title {
+      font-family: Georgia, serif;
+      font-size: clamp(54px, 14vw, 120px);
+      line-height: 0.84;
+      letter-spacing: -5px;
+    }
+
+    .credits-sub {
+      margin-top: 24px;
+      font-size: 10px;
+      letter-spacing: 5px;
+      color: #777;
+    }
+
+    .credits-copy {
+      margin-top: 60px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      line-height: 2.3;
+      color: #666;
+    }
+
+    .credits-maybe {
+      margin-top: 45px;
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-size: 26px;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 700px) {
+
+      .container {
+        width: min(100% - 28px, 980px);
+      }
+
+      .section {
+        padding: 75px 0;
+      }
+
+      .section-title {
+        font-size: clamp(38px, 12vw, 60px);
+        letter-spacing: -2px;
+      }
+
+      .hero-title {
+        font-size: clamp(58px, 19vw, 88px);
+        letter-spacing: -3px;
+      }
+
+      .italy-title {
+        font-size: clamp(72px, 23vw, 105px);
+        letter-spacing: -4px;
+      }
+
+      .case-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .plan-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .photo-frame,
+      .final-image {
+        aspect-ratio: 4 / 5;
+      }
+
+      .photo-content {
+        padding: 28px 22px;
+      }
+
+      .photo-content h2 {
+        font-size: clamp(34px, 10vw, 46px);
+      }
+
+      .character-name {
+        font-size: clamp(48px, 15vw, 75px);
+        letter-spacing: -2px;
+      }
+
+      .aliases {
+        letter-spacing: 2px;
+      }
+
+      .terminal-body {
+        padding: 18px;
+        font-size: 12px;
+      }
+
+      .terminal-row {
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .terminal-answer {
+        text-align: left;
+      }
+
+      .final-big {
+        font-size: clamp(38px, 12vw, 54px);
+        letter-spacing: -2px;
+      }
+
+      .credits-title {
+        letter-spacing: -3px;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
-
-<div class="progress-track">
-  <div id="progress"></div>
+<div class="progress-wrap">
+  <div class="progress-bar" id="progressBar"></div>
 </div>
 
-<div class="chapter-counter" id="counter">
-  01 / 12
-</div>
+<div class="page">
 
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content reveal">
+      <div class="hero-kicker">
+        A VERY UNPLANNED PRODUCTION
+      </div>
 
-<!-- =========================
-     INTRO
-========================= -->
+      <h1 class="hero-title">
+        ONE MORE<br>TRIP?
+      </h1>
 
-<div id="intro">
+      <p class="hero-text">
+        Two countries. One concert. Several schedules.
+        One fencing problem. And absolutely no clear plan.
+      </p>
 
-  <div class="intro-inner">
-
-    <div class="label">
-      A VERY UNPLANNED PRODUCTION
+      <button class="hero-button" onclick="document.getElementById('morocco').scrollIntoView()">
+        START THE STORY
+      </button>
     </div>
 
-    <h1 class="intro-title">
-      ONE MORE<br>TRIP?
-    </h1>
-
-    <p class="intro-desc">
-      Two countries.
-      One concert.
-      Several schedules.
-      One fencing problem.
-      And absolutely no idea what is going to happen.
-    </p>
-
-    <button class="watch-btn" id="watch">
-      WATCH TRAILER
-    </button>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     1 OPENING
-========================= -->
-
-<section class="scene opening chapter">
-
-  <div class="inner reveal">
-
-    <div class="eyebrow">
-      COMING THIS FALL
+    <div class="scroll-cue">
+      SCROLL ↓
     </div>
-
-    <h1 class="big-title">
-      Everything was
-      <br>
-      supposed to be simple.
-    </h1>
-
-    <p class="opening-quote">
-      They already had a plan.
-    </p>
-
-  </div>
-
-  <div class="scroll">
-    SCROLL TO CONTINUE ↓
-  </div>
-
-</section>
+  </section>
 
 
-<!-- =========================
-     2 MOROCCO
-========================= -->
-
-<section class="scene morocco chapter">
-
-  <div class="inner reveal">
-
-    <div class="eyebrow">
-      MID OCTOBER · 2026
-    </div>
-
-    <h1 class="big-title">
-      MOROCCO
-    </h1>
-
-    <p class="subtitle">
-      Kami + Panagiotis.
-      <br><br>
-
-      Holiday.
-      Together.
-      <br><br>
-
-      For once...
-      something is actually confirmed.
-    </p>
-
-    <div class="confirmed">
-      CONFIRMED ✓
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     3 ITALY
-========================= -->
-
-<section class="scene italy-reveal chapter">
-
-  <div class="inner reveal">
-
-    <div class="eyebrow">
-      BUT BEFORE MOROCCO...
-    </div>
-
-    <h1 class="big-title italy-text">
-      ITALY.
-    </h1>
-
-    <p class="subtitle">
-      And suddenly the entire plan became significantly less simple.
-    </p>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     4 KAMI
-========================= -->
-
-<section class="scene photo-scene chapter">
-
-  <img
-    src="IMG_3480.jpeg"
-    class="photo"
-    alt=""
-  >
-
-  <div class="photo-overlay"></div>
-
-  <div class="photo-copy reveal">
-
-    <div class="eyebrow">
-      CHAPTER ONE
-    </div>
-
-    <h2 class="mid-title">
-      Kami is going to Italy.
-    </h2>
-
-    <p class="subtitle">
-      That part is confirmed.
-      <br><br>
-
-      Everything after that is a mystery.
-    </p>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     5 QUESTIONS
-========================= -->
-
-<section class="scene questions chapter">
-
-  <div class="inner reveal">
-
-    <div class="eyebrow">
-      CURRENT INFORMATION
-    </div>
-
-    <h2 class="mid-title">
-      We know almost nothing.
-    </h2>
-
-    <div class="question-grid">
-
-      <div class="card">
-
-        <div class="card-number">
-          QUESTION 01
+  <!-- MOROCCO -->
+  <section class="section morocco" id="morocco">
+    <div class="container reveal">
+      <div class="morocco-card">
+        <div class="section-label">
+          MID OCTOBER · 2026
         </div>
 
-        <h3>
-          Where is she staying?
-        </h3>
+        <h2 class="section-title">
+          Morocco.
+        </h2>
 
-        <div class="answer">
-          Unknown.
+        <p class="section-subtitle">
+          Kami + Panagiotis.
+          A holiday together.
+          And for once, something in this entire story is actually confirmed.
+        </p>
+
+        <div class="stamp">
+          CONFIRMED ✓
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ITALY -->
+  <section class="section italy">
+    <div class="container reveal center">
+      <div class="section-label">
+        BUT BEFORE MOROCCO...
+      </div>
+
+      <h2 class="italy-title">
+        ITALY.
+      </h2>
+
+      <p class="section-subtitle">
+        And suddenly the plan stopped being simple.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- KAMI PHOTO -->
+  <section class="section">
+    <div class="container reveal">
+      <div class="photo-card">
+
+        <div class="photo-frame">
+          <img src="IMG_3480.jpeg" alt="">
+        </div>
+
+        <div class="photo-content">
+          <div class="section-label">
+            SCENE 01
+          </div>
+
+          <h2>
+            Kami is going to Italy.
+          </h2>
+
+          <p>
+            That part we know.
+            Everything after that is where the story gets interesting.
+          </p>
         </div>
 
       </div>
+    </div>
+  </section>
 
 
-      <div class="card">
+  <!-- CASE FILE -->
+  <section class="section case-file">
+    <div class="container reveal">
 
-        <div class="card-number">
-          QUESTION 02
-        </div>
-
-        <h3>
-          For how long?
-        </h3>
-
-        <div class="answer">
-          Also unknown.
-        </div>
-
+      <div class="section-label">
+        CASE FILE
       </div>
 
+      <h2 class="section-title">
+        Current information.
+      </h2>
 
-      <div class="card">
+      <p class="section-subtitle">
+        A highly detailed and extremely professional summary of everything we currently know.
+      </p>
 
-        <div class="card-number">
-          QUESTION 03
+      <div class="case-grid">
+
+        <div class="case-item">
+          <span>DESTINATION</span>
+          <strong>ITALY</strong>
+          <p>Confirmed.</p>
         </div>
 
-        <h3>
-          Exact dates?
-        </h3>
-
-        <div class="answer">
-          Excellent question.
+        <div class="case-item">
+          <span>EXACT DATES</span>
+          <strong>???</strong>
+          <p>Excellent question.</p>
         </div>
 
-      </div>
-
-
-      <div class="card">
-
-        <div class="card-number">
-          QUESTION 04
+        <div class="case-item">
+          <span>ACCOMMODATION</span>
+          <strong>UNKNOWN</strong>
+          <p>Details pending.</p>
         </div>
 
-        <h3>
-          Will the plan change again?
-        </h3>
-
-        <div class="answer">
-          Almost definitely.
+        <div class="case-item">
+          <span>GENERAL ORGANIZATION</span>
+          <strong>QUESTIONABLE</strong>
+          <p>We remain optimistic.</p>
         </div>
 
       </div>
 
     </div>
+  </section>
 
-  </div>
 
-</section>
+  <!-- DORITOS -->
+  <section class="section">
+    <div class="container reveal">
 
+      <div class="photo-card">
 
-<!-- =========================
-     6 DORITOS
-========================= -->
+        <div class="photo-frame">
+          <img src="IMG_3452.jpeg" alt="">
+        </div>
 
-<section class="scene photo-scene chapter">
+        <div class="photo-content">
 
-  <img
-    src="IMG_3452.jpeg"
-    class="photo"
-    alt=""
-  >
+          <div class="section-label">
+            LIVE FROM THE PLANNING DEPARTMENT
+          </div>
 
-  <div class="photo-overlay"></div>
+          <h2>
+            She is clearly taking this very seriously.
+          </h2>
 
-  <div class="photo-copy reveal">
+          <p>
+            Research. Planning. Deep analysis.
+          </p>
 
-    <div class="eyebrow">
-      LIVE FROM THE PLANNING DEPARTMENT
-    </div>
+          <div class="doritos-note">
+            + DORITOS
+          </div>
 
-    <h2 class="mid-title">
-      Kami is working extremely hard on the problem.
-    </h2>
-
-    <p class="subtitle">
-      Research.
-      Planning.
-      Analysis.
-    </p>
-
-    <div class="doritos-tag">
-      AND DORITOS.
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     7 CONCERT
-========================= -->
-
-<section class="scene concert chapter">
-
-  <div class="inner reveal">
-
-    <div class="mic">
-      🎤
-    </div>
-
-    <div class="eyebrow">
-      BUT WAIT
-    </div>
-
-    <h1 class="big-title">
-      THE
-      <br>
-      CONCERT.
-    </h1>
-
-    <p class="subtitle">
-      A very important concert.
-      <br>
-
-      A concert she really wants to attend.
-      <br><br>
-
-      Will Italy interfere?
-    </p>
-
-    <div class="unknown">
-      Nobody knows.
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     8 PANAGIOTIS
-========================= -->
-
-<section class="scene panagiotis chapter">
-
-  <div class="inner reveal">
-
-    <div class="eyebrow">
-      AND THEN...
-    </div>
-
-    <h2 class="mid-title">
-      Another possibility appeared.
-    </h2>
-
-    <div class="arrow">
-      ↓
-    </div>
-
-    <h1 class="big-title">
-      PANAGIOTIS
-      <br>
-      → ITALY?
-    </h1>
-
-    <p class="subtitle">
-      Late September.
-      <br>
-      Maybe.
-    </p>
-
-    <div class="name-list">
-      THEO · PANOS · PANAGIOTIS
-      <br><br>
-      EVEN THE WEBSITE ISN'T SURE
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     9 PHOTO
-========================= -->
-
-<section class="scene photo-scene chapter">
-
-  <img
-    src="IMG_9610.jpeg"
-    class="photo"
-    alt=""
-  >
-
-  <div class="photo-overlay"></div>
-
-  <div class="photo-copy reveal">
-
-    <div class="eyebrow">
-      PANAGIOTIS, CURRENTLY
-    </div>
-
-    <h2 class="mid-title">
-      How exactly
-      <br>
-      are we supposed
-      <br>
-      to make this work?
-    </h2>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     10 SYSTEM
-========================= -->
-
-<section
-  class="scene system chapter"
-  id="systemScene"
->
-
-  <div class="inner reveal">
-
-    <div class="eyebrow">
-      ADVANCED TRAVEL ANALYSIS SYSTEM
-    </div>
-
-    <h2 class="mid-title">
-      Let's calculate it.
-    </h2>
-
-    <div class="terminal">
-
-      <div class="terminal-header">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
-
-      <div class="term">
-        Checking Kami's Italy dates...
-        <strong>UNKNOWN</strong>
-      </div>
-
-      <div class="term">
-        Checking accommodation...
-        <strong>UNKNOWN</strong>
-      </div>
-
-      <div class="term">
-        Checking concert...
-        <strong>COMPLICATED</strong>
-      </div>
-
-      <div class="term">
-        Checking Panagiotis' schedule...
-        <strong>VERY COMPLICATED</strong>
-      </div>
-
-      <div class="term">
-        Checking fencing training...
-        <strong>REQUIRED ⚔</strong>
-      </div>
-
-      <div class="term">
-        Checking possible Italy trip together...
-        <strong>???</strong>
-      </div>
-
-      <div class="term">
-        Checking Morocco afterwards...
-        <strong>CONFIRMED ✓</strong>
-      </div>
-
-      <div class="term">
-        Checking name...
-        <strong>THEO? PANOS? PANAGIOTIS?</strong>
-      </div>
-
-      <div
-        class="result"
-        id="result"
-      >
-
-        <strong>
-          ANALYSIS COMPLETE.
-        </strong>
-
-        <br><br>
-
-        Probability of everything
-        going exactly according to plan:
-
-        <br><br>
-
-        <strong style="font-size:30px;">
-          0.4%
-        </strong>
-
-        <br><br>
-
-        Probability we'll somehow
-        figure it out anyway:
-
-        <br><br>
-
-        <strong style="font-size:30px;">
-          100%.
-        </strong>
+        </div>
 
       </div>
 
-      <button
-        class="recalc"
-        id="recalc"
-      >
-        RECALCULATE
+    </div>
+  </section>
+
+
+  <!-- CONCERT -->
+  <section class="section concert">
+    <div class="container reveal center">
+
+      <div class="concert-icon">
+        🎤
+      </div>
+
+      <div class="section-label">
+        ANOTHER SMALL PROBLEM
+      </div>
+
+      <h2 class="section-title">
+        The concert.
+      </h2>
+
+      <p class="section-subtitle">
+        A very important concert.
+        One she really wants to attend.
+        And the Italy plan may or may not make that slightly complicated.
+      </p>
+
+      <div class="concert-small">
+        Will it all fit?
+        <br>
+        Nobody knows.
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- CHARACTER -->
+  <section class="section">
+    <div class="container reveal">
+
+      <div class="character-card">
+
+        <div class="section-label">
+          NEW CHARACTER DETECTED
+        </div>
+
+        <div class="character-name">
+          PANAGIOTIS
+        </div>
+
+        <div class="aliases">
+          ALSO KNOWN AS<br>
+          PANOS · THEO · APPARENTLY WHATEVER THE WEBSITE DECIDES
+        </div>
+
+        <div class="maybe-tag">
+          ITALY → MAYBE
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- HEAD PHOTO -->
+  <section class="section">
+    <div class="container reveal">
+
+      <div class="photo-card">
+
+        <div class="photo-frame">
+          <img src="IMG_9610.jpeg" alt="">
+        </div>
+
+        <div class="photo-content">
+
+          <div class="section-label">
+            CURRENT LEVEL OF ORGANIZATION
+          </div>
+
+          <h2>
+            Excellent.
+          </h2>
+
+          <p>
+            Panagiotis is now attempting to understand how Italy,
+            fencing, schedules, a concert and Morocco are supposed to coexist.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ANALYSIS -->
+  <section class="section analysis">
+    <div class="container reveal">
+
+      <div class="section-label">
+        ADVANCED ANALYSIS
+      </div>
+
+      <h2 class="section-title">
+        Let's calculate this.
+      </h2>
+
+      <p class="section-subtitle">
+        Surely technology can solve the problem.
+      </p>
+
+      <div class="terminal">
+
+        <div class="terminal-top">
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+        </div>
+
+        <div class="terminal-body">
+
+          <div class="terminal-row">
+            <div class="terminal-question">
+              Kami's exact dates
+            </div>
+            <div class="terminal-answer">
+              UNKNOWN
+            </div>
+          </div>
+
+          <div class="terminal-row">
+            <div class="terminal-question">
+              Accommodation
+            </div>
+            <div class="terminal-answer">
+              UNKNOWN
+            </div>
+          </div>
+
+          <div class="terminal-row">
+            <div class="terminal-question">
+              Concert
+            </div>
+            <div class="terminal-answer">
+              COMPLICATED
+            </div>
+          </div>
+
+          <div class="terminal-row">
+            <div class="terminal-question">
+              Panagiotis' schedule
+            </div>
+            <div class="terminal-answer">
+              ALSO COMPLICATED
+            </div>
+          </div>
+
+          <div class="terminal-row">
+            <div class="terminal-question">
+              Fencing training
+            </div>
+            <div class="terminal-answer">
+              REQUIRED ⚔
+            </div>
+          </div>
+
+          <div class="terminal-row">
+            <div class="terminal-question">
+              Panagiotis → Italy
+            </div>
+            <div class="terminal-answer">
+              MAYBE
+            </div>
+          </div>
+
+          <div class="terminal-row">
+            <div class="terminal-question">
+              Morocco
+            </div>
+            <div class="terminal-answer">
+              CONFIRMED ✓
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <button class="analysis-button" id="analysisButton">
+        SHOW FINAL ANALYSIS
       </button>
 
-    </div>
+      <div class="analysis-result" id="analysisResult">
 
-  </div>
-
-</section>
-
-
-<!-- =========================
-     11 SCHEDULE
-========================= -->
-
-<section class="scene schedule chapter">
-
-  <div class="inner reveal">
-
-    <div class="eyebrow">
-      THE OFFICIAL PLAN
-    </div>
-
-    <h2 class="mid-title">
-      Simple.
-      <br>
-      Obviously.
-    </h2>
-
-    <div class="timeline">
-
-      <div class="time-row">
-
-        <div class="time-month">
-          LATE SEPTEMBER
+        <div class="section-label">
+          ANALYSIS COMPLETE
         </div>
 
-        <div>
+        <div class="analysis-stat">
+          <span>
+            PROBABILITY EVERYTHING GOES EXACTLY TO PLAN
+          </span>
 
-          <div class="time-title">
-            🇮🇹 Italy
-          </div>
+          <strong>
+            0.4%
+          </strong>
+        </div>
 
-          <div class="time-status">
-            Kami: YES
-            <br>
+        <div class="analysis-stat">
+          <span>
+            PROBABILITY WE SOMEHOW FIGURE IT OUT ANYWAY
+          </span>
 
-            Panagiotis: MAYBE
-            <br>
-
-            Exact plan: ABSOLUTELY NOT
-          </div>
-
+          <strong>
+            100%
+          </strong>
         </div>
 
       </div>
 
+    </div>
+  </section>
 
-      <div class="time-row">
 
-        <div class="time-month">
-          SOMEWHERE HERE
-        </div>
+  <!-- PLAN -->
+  <section class="section">
+    <div class="container reveal">
 
-        <div>
+      <div class="section-label">
+        THE ACTUAL PLAN
+      </div>
 
-          <div class="time-title">
-            🎤 The Concert
+      <h2 class="section-title">
+        Very simple.
+      </h2>
+
+      <p class="section-subtitle">
+        Obviously.
+      </p>
+
+      <div class="plan-grid">
+
+        <div class="plan-card">
+          <div class="emoji">
+            🇮🇹
           </div>
 
-          <div class="time-status">
-            Current status:
+          <h3>
+            Italy
+          </h3>
+
+          <div class="status">
+            KAMI: YES
             <br><br>
-
-            PLEASE DO NOT LET ITALY DESTROY THIS.
+            PANAGIOTIS: MAYBE
           </div>
-
         </div>
 
-      </div>
-
-
-      <div class="time-row">
-
-        <div class="time-month">
-          MID OCTOBER
-        </div>
-
-        <div>
-
-          <div class="time-title">
-            🇲🇦 Morocco
+        <div class="plan-card">
+          <div class="emoji">
+            🎤
           </div>
 
-          <div class="time-status">
-            Kami: YES
-            <br>
+          <h3>
+            Concert
+          </h3>
 
-            Panagiotis: YES
+          <div class="status">
+            STATUS:
             <br><br>
+            PLEASE WORK
+          </div>
+        </div>
 
-            Finally, one normal answer.
+        <div class="plan-card">
+          <div class="emoji">
+            🇲🇦
+          </div>
+
+          <h3>
+            Morocco
+          </h3>
+
+          <div class="status">
+            KAMI: YES
+            <br><br>
+            PANAGIOTIS: YES
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- FINAL -->
+  <section class="section">
+    <div class="container reveal">
+
+      <div class="final-card">
+
+        <div class="final-image">
+          <img src="IMG_3402.jpeg" alt="">
+        </div>
+
+        <div class="final-copy">
+
+          <div class="section-label">
+            SO...
+          </div>
+
+          <div class="final-lines">
+            Maybe Italy works.
+            <br>
+            Maybe it doesn't.
+            <br>
+            Maybe Panagiotis comes too.
+            <br>
+            Maybe the plan changes another 47 times.
+          </div>
+
+          <div class="final-big">
+            We'll figure it out. ❤️
           </div>
 
         </div>
@@ -1807,371 +1258,130 @@ body::before{
       </div>
 
     </div>
-
-  </div>
-
-</section>
+  </section>
 
 
-<!-- =========================
-     12 ENDING
-========================= -->
+  <!-- CREDITS -->
+  <section class="section credits">
+    <div class="container reveal">
 
-<section class="scene ending chapter">
+      <div class="section-label">
+        THE NEXT CHAPTER
+      </div>
 
-  <img
-    src="IMG_3402.jpeg"
-    class="ending-photo"
-    alt=""
-  >
+      <div class="credits-title">
+        ONE MORE<br>TRIP?
+      </div>
 
-  <div class="ending-overlay"></div>
+      <div class="credits-sub">
+        THE ITALY CHAPTER
+      </div>
 
-  <div class="ending-copy reveal">
+      <div class="credits-copy">
+        STARRING
+        <br>
+        KAMI & PANAGIOTIS
+        <br><br>
 
-    <div class="eyebrow">
-      SO...
-    </div>
+        ALSO KNOWN AS
+        <br>
+        KAMI & PANOS · KAMI & THEO
+        <br><br>
 
-    <p>
-      Maybe Italy works.
-    </p>
+        LOCATIONS
+        <br>
+        ITALY · MOROCCO · PROBABLY A FENCING HALL
+        <br><br>
 
-    <p>
-      Maybe it doesn't.
-    </p>
+        EXPECTED RELEASE
+        <br>
+        SEPTEMBER 2026
+      </div>
 
-    <p>
-      Maybe Panagiotis comes too.
-    </p>
-
-    <p>
-      Maybe the plan changes
-      another 47 times.
-    </p>
-
-    <p>
-      Maybe none of this makes
-      any sense until the last minute.
-    </p>
-
-    <p class="final-line">
-      But whatever happens...
-      <br><br>
-
-      we'll figure it out.
-      ❤️
-    </p>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     POSTER
-========================= -->
-
-<section class="poster">
-
-  <div class="inner reveal">
-
-    <div class="eyebrow">
-      THE NEXT CHAPTER
-    </div>
-
-    <h1 class="poster-title">
-      ONE MORE
-      <br>
-      TRIP?
-    </h1>
-
-    <div class="poster-sub">
-      THE ITALY CHAPTER
-    </div>
-
-    <div class="credits">
-
-      STARRING
-      <br>
-
-      KAMI & PANAGIOTIS
-
-      <br><br>
-
-      ALSO KNOWN AS
-      <br>
-
-      KAMI & PANOS
-      <br>
-
-      KAMI & THEO
-
-      <br><br>
-
-      LOCATIONS
-      <br>
-
-      ITALY · MOROCCO
-      <br>
-
-      AND PROBABLY A FENCING HALL
-
-      <br><br>
-
-      RELEASE DATE
-      <br>
-
-      SEPTEMBER 2026
+      <div class="credits-maybe">
+        Maybe.
+      </div>
 
     </div>
+  </section>
 
-    <div class="maybe-final">
-      Maybe.
-    </div>
-
-  </div>
-
-</section>
+</div>
 
 
 <script>
 
-/* =========================
-   INTRO
-========================= */
+  /* REVEAL */
 
-const intro =
-document.getElementById("intro");
+  const revealItems =
+    document.querySelectorAll(".reveal");
 
-document
-.getElementById("watch")
-.addEventListener("click", () => {
+  const revealObserver =
+    new IntersectionObserver(entries => {
 
-  intro.classList.add("hide");
+      entries.forEach(entry => {
 
-});
+        if(entry.isIntersecting){
+          entry.target.classList.add("visible");
+        }
 
+      });
 
-/* =========================
-   REVEAL
-========================= */
+    }, {
+      threshold: 0.15
+    });
 
-const revealObserver =
-new IntersectionObserver(entries => {
-
-  entries.forEach(entry => {
-
-    if(entry.isIntersecting){
-
-      entry.target.classList.add("visible");
-
-    }
-
+  revealItems.forEach(item => {
+    revealObserver.observe(item);
   });
 
-},{
-  threshold:.18
-});
 
+  /* PROGRESS */
 
-document
-.querySelectorAll(".reveal")
-.forEach(el => {
+  const progressBar =
+    document.getElementById("progressBar");
 
-  revealObserver.observe(el);
+  window.addEventListener("scroll", () => {
 
-});
+    const documentHeight =
+      document.documentElement.scrollHeight -
+      window.innerHeight;
 
-
-/* =========================
-   PROGRESS
-========================= */
-
-const progress =
-document.getElementById("progress");
-
-window.addEventListener("scroll", () => {
-
-  const max =
-    document.documentElement.scrollHeight -
-    window.innerHeight;
-
-  const percentage =
-    max > 0
-      ? (window.scrollY / max) * 100
+    const scrolled =
+      documentHeight > 0
+      ? (window.scrollY / documentHeight) * 100
       : 0;
 
-  progress.style.width =
-    percentage + "%";
-
-});
-
-
-/* =========================
-   CHAPTER COUNTER
-========================= */
-
-const chapters =
-document.querySelectorAll(".chapter");
-
-const counter =
-document.getElementById("counter");
-
-const chapterObserver =
-new IntersectionObserver(entries => {
-
-  entries.forEach(entry => {
-
-    if(entry.isIntersecting){
-
-      const index =
-        [...chapters].indexOf(entry.target) + 1;
-
-      counter.innerText =
-        String(index).padStart(2,"0")
-        +
-        " / "
-        +
-        String(chapters.length).padStart(2,"0");
-
-    }
+    progressBar.style.width =
+      scrolled + "%";
 
   });
 
-},{
-  threshold:.55
-});
 
+  /* ANALYSIS BUTTON */
 
-chapters.forEach(chapter => {
+  const analysisButton =
+    document.getElementById("analysisButton");
 
-  chapterObserver.observe(chapter);
+  const analysisResult =
+    document.getElementById("analysisResult");
 
-});
+  analysisButton.addEventListener("click", () => {
 
+    analysisButton.innerText =
+      "ANALYZING...";
 
-/* =========================
-   TERMINAL
-========================= */
-
-const systemScene =
-document.getElementById("systemScene");
-
-const lines =
-document.querySelectorAll(".term");
-
-const result =
-document.getElementById("result");
-
-const recalc =
-document.getElementById("recalc");
-
-let played = false;
-
-
-function runSystem(){
-
-  lines.forEach(line => {
-
-    line.classList.remove("show");
-
-  });
-
-  result.style.display = "none";
-  recalc.style.display = "none";
-
-
-  lines.forEach((line,index) => {
+    analysisButton.disabled = true;
 
     setTimeout(() => {
 
-      line.classList.add("show");
+      analysisResult.classList.add("show");
 
-    }, index * 580);
+      analysisButton.innerText =
+        "ANALYSIS COMPLETE";
 
-  });
-
-
-  setTimeout(() => {
-
-    result.style.display = "block";
-
-    result.animate(
-
-      [
-        {
-          opacity:0,
-          transform:"translateY(15px)"
-        },
-        {
-          opacity:1,
-          transform:"translateY(0)"
-        }
-      ],
-
-      {
-        duration:700,
-        fill:"forwards"
-      }
-
-    );
-
-  }, lines.length * 580 + 600);
-
-
-  setTimeout(() => {
-
-    recalc.style.display = "block";
-
-  }, lines.length * 580 + 1600);
-
-}
-
-
-const systemObserver =
-new IntersectionObserver(entries => {
-
-  entries.forEach(entry => {
-
-    if(
-      entry.isIntersecting &&
-      !played
-    ){
-
-      played = true;
-      runSystem();
-
-    }
+    }, 1200);
 
   });
-
-},{
-  threshold:.35
-});
-
-
-systemObserver.observe(systemScene);
-
-
-recalc.addEventListener(
-  "click",
-  () => {
-
-    recalc.innerText =
-      "STILL CALCULATING...";
-
-    setTimeout(() => {
-
-      recalc.innerText =
-        "RECALCULATE";
-
-      runSystem();
-
-    },700);
-
-  }
-);
 
 </script>
 
